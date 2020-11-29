@@ -1,5 +1,5 @@
 {
-    "name": "chandrawi/spark-query",
+    "name": "sparklib/spark-query",
     "description": "lightweight PHP query builder with elegant syntax",
     "type": "library",
     "license": "MIT",
