@@ -1,11 +1,11 @@
 <?php
 
-namespace SparkQuery\Query\Manipulation;
+namespace SparkLib\SparkQuery\Query\Manipulation;
 
-use SparkQuery\Query\Manipulation\BaseClause;
-use SparkQuery\Interfaces\IHaving;
-use SparkQuery\Structure\Column;
-use SparkQuery\Structure\Clause;
+use SparkLib\SparkQuery\Query\Manipulation\BaseClause;
+use SparkLib\SparkQuery\Interfaces\IHaving;
+use SparkLib\SparkQuery\Structure\Column;
+use SparkLib\SparkQuery\Structure\Clause;
 
 class Having extends BaseClause
 {

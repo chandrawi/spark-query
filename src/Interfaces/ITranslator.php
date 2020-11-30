@@ -1,6 +1,6 @@
 <?php
 
-namespace SparkQuery\Interfaces;
+namespace SparkLib\SparkQuery\Interfaces;
 
 interface ITranslator
 {

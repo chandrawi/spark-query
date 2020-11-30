@@ -1,8 +1,8 @@
 <?php
 
-namespace SparkQuery\Structure;
+namespace SparkLib\SparkQuery\Structure;
 
-use SparkQuery\Structure\Column;
+use SparkLib\SparkQuery\Structure\Column;
 
 class Order
 {

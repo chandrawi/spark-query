@@ -1,18 +1,18 @@
 <?php
 
-namespace SparkQuery\Builder;
+namespace SparkLib\SparkQuery\Builder;
 
-use SparkQuery\Builder\BaseBuilder;
-use SparkQuery\Structure\Join;
-use SparkQuery\Structure\Clause;
-use SparkQuery\Structure\Order;
-use SparkQuery\Structure\Limit;
-use SparkQuery\Interfaces\IJoin;
-use SparkQuery\Interfaces\IWhere;
-use SparkQuery\Interfaces\IGroupBy;
-use SparkQuery\Interfaces\IHaving;
-use SparkQuery\Interfaces\IOrderBy;
-use SparkQuery\Interfaces\ILimit;
+use SparkLib\SparkQuery\Builder\BaseBuilder;
+use SparkLib\SparkQuery\Structure\Join;
+use SparkLib\SparkQuery\Structure\Clause;
+use SparkLib\SparkQuery\Structure\Order;
+use SparkLib\SparkQuery\Structure\Limit;
+use SparkLib\SparkQuery\Interfaces\IJoin;
+use SparkLib\SparkQuery\Interfaces\IWhere;
+use SparkLib\SparkQuery\Interfaces\IGroupBy;
+use SparkLib\SparkQuery\Interfaces\IHaving;
+use SparkLib\SparkQuery\Interfaces\IOrderBy;
+use SparkLib\SparkQuery\Interfaces\ILimit;
 
 class SelectBuilder extends BaseBuilder implements IJoin, IWhere, IGroupBy, IHaving, IOrderBy, ILimit
 {

@@ -1,12 +1,12 @@
 <?php
 
-namespace SparkQuery\Query\Basic;
+namespace SparkLib\SparkQuery\Query\Basic;
 
-use SparkQuery\Query\BaseQuery;
-use SparkQuery\Query\Manipulation\Where;
-use SparkQuery\Query\Manipulation\LimitOffset;
-use SparkQuery\Builder\BaseBuilder;
-use SparkQuery\Builder\DeleteBuilder;
+use SparkLib\SparkQuery\Query\BaseQuery;
+use SparkLib\SparkQuery\Query\Manipulation\Where;
+use SparkLib\SparkQuery\Query\Manipulation\LimitOffset;
+use SparkLib\SparkQuery\Builder\BaseBuilder;
+use SparkLib\SparkQuery\Builder\DeleteBuilder;
 
 class Delete extends BaseQuery
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace SparkQuery\Structure;
+namespace SparkLib\SparkQuery\Structure;
 
 class Table
 {

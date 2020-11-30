@@ -1,13 +1,13 @@
 <?php
 
-namespace SparkQuery;
+namespace SparkLib\SparkQuery;
 
-use SparkQuery\Query\BaseQuery;
-use SparkQuery\Query\QueryObject;
-use SparkQuery\Builder\SelectBuilder;
-use SparkQuery\Builder\InsertBuilder;
-use SparkQuery\Builder\UpdateBuilder;
-use SparkQuery\Builder\DeleteBuilder;
+use SparkLib\SparkQuery\Query\BaseQuery;
+use SparkLib\SparkQuery\Query\QueryObject;
+use SparkLib\SparkQuery\Builder\SelectBuilder;
+use SparkLib\SparkQuery\Builder\InsertBuilder;
+use SparkLib\SparkQuery\Builder\UpdateBuilder;
+use SparkLib\SparkQuery\Builder\DeleteBuilder;
 
 class QueryTranslator
 {
@@ -27,11 +27,11 @@ class QueryTranslator
     /** Default translator options */
     public const TRANSLATOR_GENERIC = 1;
     /** Default translator options */
-    public const TRANSLATOR_BEAUTIFY = 2;
+    // public const TRANSLATOR_BEAUTIFY = 2;
     /** Default translator options */
     public const TRANSLATOR_MYSQL = 3;
     /** Default translator options */
-    public const TRANSLATOR_SQLITE = 4;
+    // public const TRANSLATOR_SQLITE = 4;
 
     /**
      * Default param binding mode option
@@ -116,13 +116,13 @@ class QueryTranslator
     {
         switch ($translator) {
             case self::TRANSLATOR_GENERIC:
-                return 'SparkQuery\\Translator\\GenericTranslator';
+                return 'SparkLib\\SparkQuery\\Translator\\GenericTranslator';
             // case self::TRANSLATOR_BEAUTIFY:
-            //     return 'SparkQuery\\Translator\\BeautifyTranslator';
+            //     return 'SparkLib\\SparkQuery\\Translator\\BeautifyTranslator';
             case self::TRANSLATOR_MYSQL:
-                return 'SparkQuery\\Translator\\MySQLTranslator';
+                return 'SparkLib\\SparkQuery\\Translator\\MySQLTranslator';
             // case self::TRANSLATOR_SQLITE:
-            //     return 'SparkQuery\\Translator\\SQLiteTranslator';
+            //     return 'SparkLib\\SparkQuery\\Translator\\SQLiteTranslator';
             default:
                 throw new \Exception('Translator selected is not registered');
         }

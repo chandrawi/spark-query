@@ -1,9 +1,9 @@
 <?php
 
-namespace SparkQuery\Query\Manipulation;
+namespace SparkLib\SparkQuery\Query\Manipulation;
 
-use SparkQuery\Query\BaseQuery;
-use SparkQuery\Structure\Join;
+use SparkLib\SparkQuery\Query\BaseQuery;
+use SparkLib\SparkQuery\Structure\Join;
 
 class JoinTable extends BaseQuery
 {

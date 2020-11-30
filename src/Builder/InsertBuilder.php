@@ -1,12 +1,12 @@
 <?php
 
-namespace SparkQuery\Builder;
+namespace SparkLib\SparkQuery\Builder;
 
-use SparkQuery\Builder\BaseBuilder;
-use SparkQuery\Structure\Clause;
-use SparkQuery\Structure\Limit;
-use SparkQuery\Interfaces\IWhere;
-use SparkQuery\Interfaces\ILimit;
+use SparkLib\SparkQuery\Builder\BaseBuilder;
+use SparkLib\SparkQuery\Structure\Clause;
+use SparkLib\SparkQuery\Structure\Limit;
+use SparkLib\SparkQuery\Interfaces\IWhere;
+use SparkLib\SparkQuery\Interfaces\ILimit;
 
 class InsertBuilder extends BaseBuilder implements ILimit
 {

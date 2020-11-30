@@ -1,8 +1,8 @@
 <?php
 
-namespace SparkQuery\Interfaces;
+namespace SparkLib\SparkQuery\Interfaces;
 
-use SparkQuery\Builder\BaseBuilder;
+use SparkLib\SparkQuery\Builder\BaseBuilder;
 
 interface IQuery
 {

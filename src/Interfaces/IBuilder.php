@@ -1,8 +1,8 @@
 <?php
 
-namespace SparkQuery\Interfaces;
+namespace SparkLib\SparkQuery\Interfaces;
 
-use SparkQuery\Structure\Table;
+use SparkLib\SparkQuery\Structure\Table;
 
 interface IBuilder
 {

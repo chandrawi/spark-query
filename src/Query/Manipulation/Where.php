@@ -1,11 +1,11 @@
 <?php
 
-namespace SparkQuery\Query\Manipulation;
+namespace SparkLib\SparkQuery\Query\Manipulation;
 
-use SparkQuery\Query\Manipulation\BaseClause;
-use SparkQuery\Interfaces\IWhere;
-use SparkQuery\Structure\Column;
-use SparkQuery\Structure\Clause;
+use SparkLib\SparkQuery\Query\Manipulation\BaseClause;
+use SparkLib\SparkQuery\Interfaces\IWhere;
+use SparkLib\SparkQuery\Structure\Column;
+use SparkLib\SparkQuery\Structure\Clause;
 
 class Where extends BaseClause
 {

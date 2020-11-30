@@ -1,17 +1,17 @@
 <?php
 
-namespace SparkQuery\Translator;
+namespace SparkLib\SparkQuery\Translator;
 
-use SparkQuery\Builder\BaseBuilder;
-use SparkQuery\Structure\Table;
-use SparkQuery\Structure\Column;
-use SparkQuery\Structure\Value;
-use SparkQuery\Structure\Expression;
-use SparkQuery\Structure\Join;
-use SparkQuery\Structure\Clause;
-use SparkQuery\Structure\Order;
-use SparkQuery\Structure\Limit;
-use SparkQuery\Interfaces\ITranslator;
+use SparkLib\SparkQuery\Builder\BaseBuilder;
+use SparkLib\SparkQuery\Structure\Table;
+use SparkLib\SparkQuery\Structure\Column;
+use SparkLib\SparkQuery\Structure\Value;
+use SparkLib\SparkQuery\Structure\Expression;
+use SparkLib\SparkQuery\Structure\Join;
+use SparkLib\SparkQuery\Structure\Clause;
+use SparkLib\SparkQuery\Structure\Order;
+use SparkLib\SparkQuery\Structure\Limit;
+use SparkLib\SparkQuery\Interfaces\ITranslator;
 
 class MySQLTranslator implements ITranslator
 {

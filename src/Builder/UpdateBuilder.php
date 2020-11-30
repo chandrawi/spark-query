@@ -1,14 +1,14 @@
 <?php
 
-namespace SparkQuery\Builder;
+namespace SparkLib\SparkQuery\Builder;
 
-use SparkQuery\Builder\BaseBuilder;
-use SparkQuery\Structure\Join;
-use SparkQuery\Structure\Clause;
-use SparkQuery\Structure\Limit;
-use SparkQuery\Interfaces\IJoin;
-use SparkQuery\Interfaces\IWhere;
-use SparkQuery\Interfaces\ILimit;
+use SparkLib\SparkQuery\Builder\BaseBuilder;
+use SparkLib\SparkQuery\Structure\Join;
+use SparkLib\SparkQuery\Structure\Clause;
+use SparkLib\SparkQuery\Structure\Limit;
+use SparkLib\SparkQuery\Interfaces\IJoin;
+use SparkLib\SparkQuery\Interfaces\IWhere;
+use SparkLib\SparkQuery\Interfaces\ILimit;
 
 class UpdateBuilder extends BaseBuilder implements IJoin, IWhere, ILimit
 {

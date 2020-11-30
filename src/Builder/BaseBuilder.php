@@ -1,12 +1,12 @@
 <?php
 
-namespace SparkQuery\Builder;
+namespace SparkLib\SparkQuery\Builder;
 
-use SparkQuery\Structure\Table;
-use SparkQuery\Structure\Column;
-use SparkQuery\Structure\Value;
-use SparkQuery\Structure\Expression;
-use SparkQuery\Interfaces\IBuilder;
+use SparkLib\SparkQuery\Structure\Table;
+use SparkLib\SparkQuery\Structure\Column;
+use SparkLib\SparkQuery\Structure\Value;
+use SparkLib\SparkQuery\Structure\Expression;
+use SparkLib\SparkQuery\Interfaces\IBuilder;
 
 class BaseBuilder implements IBuilder
 {

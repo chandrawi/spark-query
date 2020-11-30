@@ -1,13 +1,13 @@
 <?php
 
-namespace SparkQuery\Query\Manipulation;
+namespace SparkLib\SparkQuery\Query\Manipulation;
 
-use SparkQuery\Query\BaseQuery;
-use SparkQuery\Query\Manipulation\Where;
-use SparkQuery\Query\Manipulation\Having;
-use SparkQuery\Structure\Column;
-use SparkQuery\Structure\Clause;
-use SparkQuery\Structure\Expression;
+use SparkLib\SparkQuery\Query\BaseQuery;
+use SparkLib\SparkQuery\Query\Manipulation\Where;
+use SparkLib\SparkQuery\Query\Manipulation\Having;
+use SparkLib\SparkQuery\Structure\Column;
+use SparkLib\SparkQuery\Structure\Clause;
+use SparkLib\SparkQuery\Structure\Expression;
 
 class BaseClause extends BaseQuery
 {

@@ -1,16 +1,16 @@
 <?php
 
-namespace SparkQuery\Query\Basic;
+namespace SparkLib\SparkQuery\Query\Basic;
 
-use SparkQuery\Query\BaseQuery;
-use SparkQuery\Query\Manipulation\Where;
-use SparkQuery\Query\Manipulation\GroupBy;
-use SparkQuery\Query\Manipulation\Having;
-use SparkQuery\Query\Manipulation\OrderBy;
-use SparkQuery\Query\Manipulation\LimitOffset;
-use SparkQuery\Query\Manipulation\JoinTable;
-use SparkQuery\Builder\BaseBuilder;
-use SparkQuery\Builder\SelectBuilder;
+use SparkLib\SparkQuery\Query\BaseQuery;
+use SparkLib\SparkQuery\Query\Manipulation\Where;
+use SparkLib\SparkQuery\Query\Manipulation\GroupBy;
+use SparkLib\SparkQuery\Query\Manipulation\Having;
+use SparkLib\SparkQuery\Query\Manipulation\OrderBy;
+use SparkLib\SparkQuery\Query\Manipulation\LimitOffset;
+use SparkLib\SparkQuery\Query\Manipulation\JoinTable;
+use SparkLib\SparkQuery\Builder\BaseBuilder;
+use SparkLib\SparkQuery\Builder\SelectBuilder;
 
 class Select extends BaseQuery
 {

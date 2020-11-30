@@ -1,16 +1,16 @@
 <?php
 
-namespace SparkQuery;
+namespace SparkLib\SparkQuery;
 
-use SparkQuery\Query\BaseQuery;
-use SparkQuery\Query\Basic\Select;
-use SparkQuery\Query\Basic\Insert;
-use SparkQuery\Query\Basic\Update;
-use SparkQuery\Query\Basic\Delete;
-use SparkQuery\Builder\SelectBuilder;
-use SparkQuery\Builder\InsertBuilder;
-use SparkQuery\Builder\UpdateBuilder;
-use SparkQuery\Builder\DeleteBuilder;
+use SparkLib\SparkQuery\Query\BaseQuery;
+use SparkLib\SparkQuery\Query\Basic\Select;
+use SparkLib\SparkQuery\Query\Basic\Insert;
+use SparkLib\SparkQuery\Query\Basic\Update;
+use SparkLib\SparkQuery\Query\Basic\Delete;
+use SparkLib\SparkQuery\Builder\SelectBuilder;
+use SparkLib\SparkQuery\Builder\InsertBuilder;
+use SparkLib\SparkQuery\Builder\UpdateBuilder;
+use SparkLib\SparkQuery\Builder\DeleteBuilder;
 
 class QueryBuilder
 {

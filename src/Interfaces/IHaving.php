@@ -1,8 +1,8 @@
 <?php
 
-namespace SparkQuery\Interfaces;
+namespace SparkLib\SparkQuery\Interfaces;
 
-use SparkQuery\Structure\Clause;
+use SparkLib\SparkQuery\Structure\Clause;
 
 interface IHaving
 {

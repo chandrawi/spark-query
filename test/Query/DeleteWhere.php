@@ -5,8 +5,8 @@ error_reporting(E_ALL);
 
 require_once __DIR__.'/../../vendor/autoload.php';
 
-use SparkQuery\QueryBuilder;
-use SparkQuery\QueryTranslator;
+use SparkLib\SparkQuery\QueryBuilder;
+use SparkLib\SparkQuery\QueryTranslator;
 
 $sparkQuery = new QueryBuilder(QueryTranslator::TRANSLATOR_MYSQL, QueryTranslator::PARAM_ASSOC);
 

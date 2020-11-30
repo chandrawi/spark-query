@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Core\QueryBuilder\Structure;
+namespace SparkLib\SparkQuery\Structure;
 
 class Expression
 {

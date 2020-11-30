@@ -1,8 +1,8 @@
 <?php
 
-namespace SparkQuery\Interfaces;
+namespace SparkLib\SparkQuery\Interfaces;
 
-use SparkQuery\Structure\Join;
+use SparkLib\SparkQuery\Structure\Join;
 
 interface IJoin
 {

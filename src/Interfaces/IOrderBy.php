@@ -1,8 +1,8 @@
 <?php
 
-namespace SparkQuery\Interfaces;
+namespace SparkLib\SparkQuery\Interfaces;
 
-use SparkQuery\Structure\Order;
+use SparkLib\SparkQuery\Structure\Order;
 
 interface IOrderBy
 {

@@ -12,9 +12,10 @@ $sparkQuery = new QueryBuilder(QueryTranslator::TRANSLATOR_MYSQL, QueryTranslato
 
 $builder = $sparkQuery
     ->select('table')
-    ->orderAsc('col1')
-    ->orderDesc('col2')
-    ->limit(25, 50)
+    ->columnExpression("CONCAT_WS(?, `col1`, `col2`, `col3`)", 'cols', ['-'])
+    ->column('col4')
+    ->where('col1', '=', 'value1')
+    ->whereExpression("UNIX_TIMESTAMP(`datetime`)%?", '=', 0, [3600])
 ;
 
 var_dump([

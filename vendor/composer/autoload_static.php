@@ -9,12 +9,12 @@ class ComposerStaticInitc26b26024ede708e9406f0ba43b815a6
     public static $prefixLengthsPsr4 = array (
         'S' => 
         array (
-            'SparkQuery\\' => 11,
+            'SparkLib\\SparkQuery\\' => 20,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'SparkQuery\\' => 
+        'SparkLib\\SparkQuery\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src',
         ),

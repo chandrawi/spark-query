@@ -1,11 +1,11 @@
 <?php
 
-namespace SparkQuery\Query\Manipulation;
+namespace SparkLib\SparkQuery\Query\Manipulation;
 
-use SparkQuery\Query\BaseQuery;
-use SparkQuery\Interfaces\IOrderBy;
-use SparkQuery\Structure\Column;
-use SparkQuery\Structure\Order;
+use SparkLib\SparkQuery\Query\BaseQuery;
+use SparkLib\SparkQuery\Interfaces\IOrderBy;
+use SparkLib\SparkQuery\Structure\Column;
+use SparkLib\SparkQuery\Structure\Order;
 
 class OrderBy extends BaseQuery
 {

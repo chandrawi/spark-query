@@ -1,6 +1,6 @@
 <?php
 
-namespace SparkQuery\Query;
+namespace SparkLib\SparkQuery\Query;
 
 class QueryObject
 {

@@ -1,10 +1,10 @@
 <?php
 
-namespace SparkQuery\Query\Manipulation;
+namespace SparkLib\SparkQuery\Query\Manipulation;
 
-use SparkQuery\Query\BaseQuery;
-use SparkQuery\Interfaces\ILimit;
-use SparkQuery\Structure\Limit;
+use SparkLib\SparkQuery\Query\BaseQuery;
+use SparkLib\SparkQuery\Interfaces\ILimit;
+use SparkLib\SparkQuery\Structure\Limit;
 
 class LimitOffset extends BaseQuery
 {

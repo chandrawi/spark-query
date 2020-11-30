@@ -1,8 +1,8 @@
 <?php
 
-namespace SparkQuery\Interfaces;
+namespace SparkLib\SparkQuery\Interfaces;
 
-use SparkQuery\Structure\Limit;
+use SparkLib\SparkQuery\Structure\Limit;
 
 interface ILimit
 {

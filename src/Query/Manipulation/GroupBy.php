@@ -1,10 +1,10 @@
 <?php
 
-namespace SparkQuery\Query\Manipulation;
+namespace SparkLib\SparkQuery\Query\Manipulation;
 
-use SparkQuery\Query\BaseQuery;
-use SparkQuery\Interfaces\IGroupBy;
-use SparkQuery\Structure\Column;
+use SparkLib\SparkQuery\Query\BaseQuery;
+use SparkLib\SparkQuery\Interfaces\IGroupBy;
+use SparkLib\SparkQuery\Structure\Column;
 
 class GroupBy extends BaseQuery
 {
