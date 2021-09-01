@@ -83,25 +83,25 @@ class QueryTranslator
 
     /**
      * Translate builder object to query object using selected translator
+     * @param QueryObject
      * @param BaseQuery $queryBuilder
      * @param int $translator
-     * @return QueryObject
      */
     public static function translateBuilder(QueryObject $queryObject, $builderObject, int $translator)
     {
-        $translatorClass = self::getTranslator($translator);
+        $translatorClass = self::getTranslator($queryObject, $translator);
         switch (true) {
             case $builderObject instanceof SelectBuilder:
-                $translatorClass::translateSelect($queryObject, $builderObject);
+                $translatorClass->translateSelect($queryObject, $builderObject);
                 break;
             case $builderObject instanceof InsertBuilder:
-                $translatorClass::translateInsert($queryObject, $builderObject);
+                $translatorClass->translateInsert($queryObject, $builderObject);
                 break;
             case $builderObject instanceof UpdateBuilder:
-                $translatorClass::translateUpdate($queryObject, $builderObject);
+                $translatorClass->translateUpdate($queryObject, $builderObject);
                 break;
             case $builderObject instanceof DeleteBuilder:
-                $translatorClass::translateDelete($queryObject, $builderObject);
+                $translatorClass->translateDelete($queryObject, $builderObject);
                 break;
             default:
                 throw new \Exception('Tried to translate unregistered builder object');
@@ -110,19 +110,20 @@ class QueryTranslator
 
     /**
      * Get selected translator instance
-     * @param mixed $builderObject
+     * @param QueryObject
+     * @param int $translator
      */
-    private static function getTranslator(int $translator)
+    private static function getTranslator(QueryObject $queryObject, int $translator)
     {
         switch ($translator) {
             case self::TRANSLATOR_GENERIC:
-                return 'SparkLib\\SparkQuery\\Translator\\GenericTranslator';
+                return new \SparkLib\SparkQuery\Translator\GenericTranslator($queryObject);
             // case self::TRANSLATOR_BEAUTIFY:
-            //     return 'SparkLib\\SparkQuery\\Translator\\BeautifyTranslator';
+            //     return new \SparkLib\SparkQuery\Translator\BeautifyTranslator($queryObject);
             case self::TRANSLATOR_MYSQL:
-                return 'SparkLib\\SparkQuery\\Translator\\MySQLTranslator';
+                return new \SparkLib\SparkQuery\Translator\MySQLTranslator($queryObject);
             // case self::TRANSLATOR_SQLITE:
-            //     return 'SparkLib\\SparkQuery\\Translator\\SQLiteTranslator';
+            //     return new \SparkLib\SparkQuery\Translator\SQLiteTranslator($queryObject);
             default:
                 throw new \Exception('Translator selected is not registered');
         }
