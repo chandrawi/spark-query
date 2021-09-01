@@ -21,7 +21,7 @@ $builder = $sparkQuery
     ->having('col5', '=', 'havingValue')
 ;
 
-var_dump([
-    'query' => $builder->query(),
-    'params' => $builder->params()
-]);
+echo var_export($builder->query());
+echo PHP_EOL;
+echo var_export($builder->params());
+echo PHP_EOL;

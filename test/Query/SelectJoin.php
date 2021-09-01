@@ -19,7 +19,7 @@ $builder = $sparkQuery
     ->columns(['col1', 'col2'])
 ;
 
-var_dump([
-    'query' => $builder->query(),
-    'params' => $builder->params()
-]);
+echo var_export($builder->query());
+echo PHP_EOL;
+echo var_export($builder->params());
+echo PHP_EOL;

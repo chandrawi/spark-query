@@ -18,7 +18,7 @@ $builder = $sparkQuery
     ->whereExpression("UNIX_TIMESTAMP(`datetime`)%?", '=', 0, [3600])
 ;
 
-var_dump([
-    'query' => $builder->query(),
-    'params' => $builder->params()
-]);
+echo var_export($builder->query());
+echo PHP_EOL;
+echo var_export($builder->params());
+echo PHP_EOL;
