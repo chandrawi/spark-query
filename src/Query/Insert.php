@@ -3,7 +3,7 @@
 namespace SparkLib\SparkQuery\Query;
 
 use SparkLib\SparkQuery\Query\BaseQuery;
-use SparkLib\SparkQuery\Query\Manipulation\LimitOffset;
+use SparkLib\SparkQuery\Query\Component\LimitOffset;
 use SparkLib\SparkQuery\Builder\BaseBuilder;
 use SparkLib\SparkQuery\Builder\InsertBuilder;
 use SparkLib\SparkQuery\Structure\Table;
@@ -13,11 +13,16 @@ class Insert extends BaseQuery
 {
 
     /**
+     * Register methods from traits
+     */
+    use LimitOffset;
+
+    /**
      * Constructor. Set builder type to insert
      */
-    public function __construct($builder = null, $translator = 0, $bindingOption = 0, $statement = null)
+    public function __construct($translator = 0, $bindingOption = 0, $statement = null)
     {
-        $this->builder = $builder instanceof InsertBuilder ? $builder : new InsertBuilder;
+        $this->builder = new InsertBuilder();
         $this->builder->builderType(BaseBuilder::INSERT);
         $this->translator = $translator;
         $this->bindingOption = $bindingOption;
@@ -26,8 +31,6 @@ class Insert extends BaseQuery
 
     /**
      * INSERT INTO query
-     * @param string $table
-     * @return this
      */
     public function insert($table)
     {
@@ -42,8 +45,6 @@ class Insert extends BaseQuery
 
     /**
      * INSERT INTO SELECT query
-     * @param string $table
-     * @return this
      */
     public function insertCopy($table)
     {
@@ -53,8 +54,6 @@ class Insert extends BaseQuery
 
     /**
      * Add a value object to list of Column in builder object
-     * @param array values
-     * @return this
      */
     public function values(array $values)
     {
@@ -65,8 +64,6 @@ class Insert extends BaseQuery
 
     /**
      * Add multiple value objects to list of Column in builder object
-     * @param array multiValues
-     * @return this
      */
     public function multiValues(array $multiValues)
     {
@@ -75,26 +72,6 @@ class Insert extends BaseQuery
             $this->builder->addValue($valueObject);
         }
         return $this;
-    }
-
-    /**
-     * Starting LIMIT and OFFSET query manipulation
-     */
-    private function limitOffsetManipulation()
-    {
-        return new LimitOffset($this->builder, Table::$table, $this->options, $this->statement);
-    }
-
-    /** LIMIT query manipulation method */
-    public function limit($limit, $offset = null)
-    {
-        return $this->limitOffsetManipulation()->limit($limit, $offset);
-    }
-
-    /** OFFSET query manipulation method */
-    public function offset($offset)
-    {
-        return $this->limitOffsetManipulation()->offset($offset);
     }
 
 }

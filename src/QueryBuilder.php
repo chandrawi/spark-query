@@ -73,7 +73,7 @@ class QueryBuilder
     public function select($table = null)
     {
         $table !== null ?: $table = $this->table;
-        $selectQuery = new Select(null, $this->translator, $this->bindingOption, $this->statement);
+        $selectQuery = new Select($this->translator, $this->bindingOption, $this->statement);
         return $selectQuery->select($table);
     }
 
@@ -85,7 +85,7 @@ class QueryBuilder
     public function selectDistinct($table = null)
     {
         $table !== null ?: $table = $this->table;
-        $selectQuery = new Select(null, $this->translator, $this->bindingOption, $this->statement);
+        $selectQuery = new Select($this->translator, $this->bindingOption, $this->statement);
         return $selectQuery->selectDistinct($table);
     }
 
@@ -97,7 +97,7 @@ class QueryBuilder
     public function insert($table = null)
     {
         $table !== null ?: $table = $this->table;
-        $insertQuery = new Insert(null, $this->translator, $this->bindingOption, $this->statement);
+        $insertQuery = new Insert($this->translator, $this->bindingOption, $this->statement);
         return $insertQuery->insert($table);
     }
 
@@ -109,7 +109,7 @@ class QueryBuilder
     public function insertCopy($table = null)
     {
         $table !== null ?: $table = $this->table;
-        $insertQuery = new Insert(null, $this->translator, $this->bindingOption, $this->statement);
+        $insertQuery = new Insert($this->translator, $this->bindingOption, $this->statement);
         return $insertQuery->insertCopy($table);
     }
 
@@ -121,7 +121,7 @@ class QueryBuilder
     public function update($table = null)
     {
         $table !== null ?: $table = $this->table;
-        $updateQuery = new Update(null, $this->translator, $this->bindingOption, $this->statement);
+        $updateQuery = new Update($this->translator, $this->bindingOption, $this->statement);
         return $updateQuery->update($table);
     }
 
@@ -133,7 +133,7 @@ class QueryBuilder
     public function delete($table = null)
     {
         $table !== null ?: $table = $this->table;
-        $deleteQuery = new Delete(null, $this->translator, $this->bindingOption, $this->statement);
+        $deleteQuery = new Delete($this->translator, $this->bindingOption, $this->statement);
         return $deleteQuery->delete($table);
     }
 

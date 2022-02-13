@@ -110,7 +110,7 @@ class BaseTranslator
     /**
      * Generate list of "FUNCTION(`table`.`column`) AS (`alias`)" for SELECT query
      */
-    protected function columnList(QueryObject $query, array $columns, int $count, bool $multiTableFlag = false)
+    protected function columnsSelect(QueryObject $query, array $columns, int $count, bool $multiTableFlag = false)
     {
         if ($count == 0) {
             $query->add('*');
@@ -151,7 +151,7 @@ class BaseTranslator
     /**
      * Generate list of "`column`" expression for INSERT query
      */
-    protected function columnListInsert(QueryObject $query, array $values, int $count)
+    protected function columnsInsert(QueryObject $query, array $values, int $count)
     {
         if ($count === 0) {
             $query->add(' '. $this->OPEN_BRACKET);
@@ -438,7 +438,6 @@ class BaseTranslator
                 if ($where instanceof Clause) {
                     $conjunctive = $this->conjunctive($where->conjunctive());
                     $nestedLevel = $where->level();
-                    print($nestedLevel);print("\n");
     
                     $query->add($conjunctive);
                     if ($nestedLevel < 0) $query->add($this->brackets($nestedLevel));

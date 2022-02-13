@@ -1,46 +1,17 @@
 <?php
 
-namespace SparkLib\SparkQuery\Query\Manipulation;
+namespace SparkLib\SparkQuery\Query\Component;
 
-use SparkLib\SparkQuery\Query\Manipulation\BaseClause;
-use SparkLib\SparkQuery\Interfaces\IWhere;
-use SparkLib\SparkQuery\Structure\Column;
 use SparkLib\SparkQuery\Structure\Clause;
 use SparkLib\SparkQuery\Structure\Expression;
 
-class Where extends BaseClause
+trait Where
 {
-
-    /**
-     * Constructor.
-     * Set the builder object
-     */
-    public function __construct($builderObject, $translator = 0, $bindingOption = 0, $statement = null)
-    {
-        if ($builderObject instanceof IWhere) {
-            $this->builder = $builderObject;
-            $this->translator = $translator;
-            $this->bindingOption = $bindingOption;
-            $this->statement = $statement;
-        } else {
-            throw new \Exception('Builder object not support Where manipulation');
-        }
-    }
-
-    /**
-     * Call function for non-exist method calling.
-     * Used for invoking next manipulation method in different class
-     */
-    public function __call($function, $arguments)
-    {
-        return $this->callQuery($function, $arguments);
-    }
 
     public function beginWhere()
     {
         Clause::$nestedConjunctive = Clause::CONJUNCTIVE_NONE;
         Clause::$nestedLevel--;
-        print(Clause::$nestedLevel);exit();
         return $this;
     }
 

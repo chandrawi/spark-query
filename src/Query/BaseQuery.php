@@ -5,9 +5,6 @@ namespace SparkLib\SparkQuery\Query;
 use SparkLib\SparkQuery\QueryObject;
 use SparkLib\SparkQuery\QueryTranslator;
 use SparkLib\SparkQuery\Builder\SelectBuilder;
-use SparkLib\SparkQuery\Builder\InsertBuilder;
-use SparkLib\SparkQuery\Builder\UpdateBuilder;
-use SparkLib\SparkQuery\Builder\DeleteBuilder;
 
 class BaseQuery
 {
@@ -18,19 +15,19 @@ class BaseQuery
     private $query;
 
     /**
-     * Default table name or alias
+     * Builder object to manipulate in query class
      */
-    protected string $table;
+    protected $builder;
 
     /**
      * Translator from QueryBuilder class
      */
-    protected int $translator;
+    protected $translator;
 
     /**
      * Binding options from QueryBuilder class
      */
-    protected int $bindingOption;
+    protected $bindingOption;
 
     /**
      * Statement callable from QueryBuilder class
@@ -47,38 +44,10 @@ class BaseQuery
 
     /** 
      * Get builder object
-     * @return
      */
     public function getBuilder()
     {
         return $this->builder;
-    }
-
-    /**
-     * Call a method from new basic query class
-     * @param mixed $method
-     * @param mixed $arguments
-     * @return
-     */
-    protected function callQuery($method, $arguments)
-    {
-        switch (true) {
-            case $this->builder instanceof SelectBuilder:
-                $queryClass = new Select($this->builder, $this->translator, $this->bindingOption, $this->statement);
-                break;
-            case $this->builder instanceof InsertBuilder:
-                $queryClass = new Insert($this->builder, $this->translator, $this->bindingOption, $this->statement);
-                break;
-            case $this->builder instanceof UpdateBuilder:
-                $queryClass = new Update($this->builder, $this->translator, $this->bindingOption, $this->statement);
-                break;
-            case $this->builder instanceof DeleteBuilder:
-                $queryClass = new Delete($this->builder, $this->translator, $this->bindingOption, $this->statement);
-                break;
-            default:
-                throw new \Exception('Unregistered query class method is tried to call');
-        }
-        return call_user_func_array([$queryClass, $method], $arguments);
     }
 
     /**

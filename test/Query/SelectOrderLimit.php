@@ -12,8 +12,8 @@ $sparkQuery = new QueryBuilder(QueryTranslator::TRANSLATOR_MYSQL, QueryTranslato
 
 $builder = $sparkQuery
     ->select('table')
-    ->orderAsc('col1')
-    ->orderDesc('col2')
+    ->orderByAsc('col1')
+    ->orderByDesc('col2')
     ->limit(25, 50)
 ;
 

@@ -48,20 +48,11 @@ class Order
     /**
      * Create list of Order object from column inputs and order type for ORDER BY query
      */
-    public static function create($columns, $orderType): array
+    public static function create($column, $orderType): Order
     {
-        $orderObjects = [];
+        $columnObject = Column::create($column);
         $validType = self::getType($orderType);
-        if (is_array($columns) && count($columns) > 1) {
-            foreach ($columns as $alias => $column) {
-                $columnObject = Column::create([$alias => $column]);
-                $orderObjects[] = new Order($columnObject, $validType);
-            }
-        } else {
-            $columnObject = Column::create($columns);
-            $orderObjects[] = new Order($columnObject, $validType);
-        }
-        return $orderObjects;
+        return new Order($columnObject, $validType);
     }
 
     /**

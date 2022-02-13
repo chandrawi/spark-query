@@ -103,7 +103,7 @@ class QueryObject
     /**
      * Set sequential and associative binding mark
      */
-    public function setBindMark(string $bindMarkNum, string $bindMarkAssoc, string $stringQuote)
+    public function setMarkQuote(string $bindMarkNum, string $bindMarkAssoc, string $stringQuote)
     {
         $this->bindMarkNum = $bindMarkNum;
         $this->bindMarkAssoc = $bindMarkAssoc;

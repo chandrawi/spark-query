@@ -1,13 +1,10 @@
 <?php
 
-namespace SparkLib\SparkQuery\Query\Manipulation;
+namespace SparkLib\SparkQuery\Query\Component;
 
-use SparkLib\SparkQuery\Query\BaseQuery;
-use SparkLib\SparkQuery\Query\Manipulation\Where;
-use SparkLib\SparkQuery\Query\Manipulation\Having;
 use SparkLib\SparkQuery\Structure\Clause;
 
-class BaseClause extends BaseQuery
+trait Clauses
 {
 
     /**
@@ -20,12 +17,10 @@ class BaseClause extends BaseQuery
             $clauseType = Clause::WHERE;
         }
         $clauseObject = Clause::create($clauseType, $column, $operator, $values, $conjunctive);
-        if ($this instanceof Where) {
-            $this->builder->addWhere($clauseObject);
-        } elseif ($this instanceof Having) {
+        if (Clause::$clauseType == Clause::HAVING) {
             $this->builder->addHaving($clauseObject);
         } else {
-            throw new \Exception('Manipulation class is not registered as extended BaseClause class');
+            $this->builder->addWhere($clauseObject);
         }
         return $this;
     }

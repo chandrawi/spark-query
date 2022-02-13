@@ -1,40 +1,12 @@
 <?php
 
-namespace SparkLib\SparkQuery\Query\Manipulation;
+namespace SparkLib\SparkQuery\Query\Component;
 
-use SparkLib\SparkQuery\Query\Manipulation\BaseClause;
-use SparkLib\SparkQuery\Interfaces\IHaving;
-use SparkLib\SparkQuery\Structure\Column;
 use SparkLib\SparkQuery\Structure\Clause;
 use SparkLib\SparkQuery\Structure\Expression;
 
-class Having extends BaseClause
+trait Having
 {
-
-    /**
-     * Constructor.
-     * Set the builder object
-     */
-    public function __construct($builderObject, $translator = 0, $bindingOption = 0, $statement = null)
-    {
-        if ($builderObject instanceof IHaving) {
-            $this->builder = $builderObject;
-            $this->translator = $translator;
-            $this->bindingOption = $bindingOption;
-            $this->statement = $statement;
-        } else {
-            throw new \Exception('Builder object not support Having manipulation');
-        }
-    }
-
-    /**
-     * Call function for non-exist method calling.
-     * Used for invoking next manipulation method in different class
-     */
-    public function __call($function, $arguments)
-    {
-        return $this->callQuery($function, $arguments);
-    }
 
     public function beginHaving()
     {

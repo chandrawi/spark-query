@@ -1,33 +1,11 @@
 <?php
 
-namespace SparkLib\SparkQuery\Query\Manipulation;
+namespace SparkLib\SparkQuery\Query\Component;
 
-use SparkLib\SparkQuery\Query\BaseQuery;
 use SparkLib\SparkQuery\Structure\Join;
 
-class JoinTable extends BaseQuery
+trait JoinTable
 {
-
-    /**
-     * Constructor.
-     * Set the builder object
-     */
-    public function __construct($builderObject, $translator = 0, $bindingOption = 0, $statement = null)
-    {
-        $this->builder = $builderObject;
-        $this->translator = $translator;
-        $this->bindingOption = $bindingOption;
-        $this->statement = $statement;
-    }
-
-    /**
-     * Call function for non-exist method calling.
-     * Used for invoking next manipulation method in different class
-     */
-    public function __call($function, $arguments)
-    {
-        return $this->callQuery($function, $arguments);
-    }
 
     /**
      * Create join table object from input table
@@ -84,10 +62,12 @@ class JoinTable extends BaseQuery
             $columns = [$columns];
         }
         foreach ($columns as $column) {
-            $this->addJoinColumn($column);
+            $lastJoin = $this->builder->lastJoin();
+            if ($lastJoin instanceof Join) {
+                $lastJoin->addColumn($column);
+            }
         }
         return $this;
     }
-
 
 }
