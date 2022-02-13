@@ -2,8 +2,33 @@
 
 namespace SparkLib\SparkQuery\Structure;
 
+use Exception;
+use SparkLib\SparkQuery\Structure\Column;
+
 class Clause
 {
+
+    /**
+     * Clause type for query builder process
+     */
+    public static $clauseType = self::NONE;
+
+    /**
+     * Stored nested conjunctive for query builder process
+     */
+    public static $nestedConjunctive = self::CONJUNCTIVE_NONE;
+
+    /**
+     * Stored nested level for query builder process
+     */
+    public static $nestedLevel = 0;
+
+    /** Clause object type */
+    public const NONE = 0;
+    /** Clause object type */
+    public const WHERE = 1;
+    /** Clause object type */
+    public const HAVING = 2;
 
     /**
      * Column object
@@ -47,9 +72,9 @@ class Clause
     public const OPERATOR_NOT_NULL = 14;
 
     /**
-     * Clause comparison values
+     * Clause comparison value
      */
-    private $values;
+    private $value;
 
     /**
      * Clause conjunctive
@@ -59,7 +84,7 @@ class Clause
     /**
      * Conjunctive for build nested clause
      */
-    private $nestedConjunctive;
+    private $level;
 
     /** Conjunctive type */
     public const CONJUNCTIVE_BEGIN = 1;
@@ -87,13 +112,13 @@ class Clause
     /**
      * Constructor. Clear all properties
      */
-    public function __construct($column, int $operator, $values, int $conjunctive, int $nestedConjunctive)
+    public function __construct($column, int $operator, $value, int $conjunctive, int $level)
     {
         $this->column = $column;
         $this->operator = ($operator >= 1 && $operator <= 14) ? $operator : self::OPERATOR_DEFAULT;
-        $this->values = $values;
+        $this->value = $value;
         $this->conjunctive = ($conjunctive >= 6 && $conjunctive <= 9) ? $conjunctive : self::CONJUNCTIVE_NONE;
-        $this->nestedConjunctive = $nestedConjunctive;
+        $this->level = $level;
     }
 
     /** Edit nested conjunctive type */
@@ -114,10 +139,10 @@ class Clause
         return $this->operator;
     }
 
-    /** Get clause comparison values */
-    public function values()
+    /** Get clause comparison value */
+    public function value()
     {
-        return $this->values;
+        return $this->value;
     }
 
     /** Get conjunctive type */
@@ -127,9 +152,129 @@ class Clause
     }
 
     /** Get nested conjunctive type */
-    public function nestedConjunctive(): int
+    public function level(): int
     {
-        return $this->nestedConjunctive;
+        return $this->level;
+    }
+
+    /**
+     * Create Clause object from column input, operator, value, and conjunctive for WHERE or HAVING query
+     */
+    public static function create(int $clauseType, $column, $operator, $value, int $conjunctive): Clause
+    {
+        if ($column instanceof Exception) {
+            $columnObject = $column;
+        } else {
+            $columnObject = Column::create($column);
+        }
+        $validOperator = self::getOperator($operator);
+        $validValue = self::getValue($value, $validOperator);
+        $conjunctive = self::getConjunctive($clauseType, $conjunctive);
+        $nestedLevel = self::$nestedLevel;
+        self::$clauseType = $clauseType;
+        self::$nestedLevel = 0;
+        return new Clause($columnObject, $validOperator, $validValue, $conjunctive, $nestedLevel);
+    }
+
+    /**
+     * Get valid operator from input operator
+     */
+    private static function getOperator($operator): int
+    {
+        if (is_int($operator)) {
+            $validOperator = $operator;
+        } else {
+            switch ($operator) {
+                case '=':
+                case '==':
+                    $validOperator = Clause::OPERATOR_EQUAL;
+                break;
+                case '!=':
+                case '<>':
+                    $validOperator = Clause::OPERATOR_NOT_EQUAL;
+                break;
+                case '>':
+                    $validOperator = Clause::OPERATOR_GREATER;
+                break;
+                case '>=':
+                    $validOperator = Clause::OPERATOR_GREATER_EQUAL;
+                break;
+                case '<':
+                    $validOperator = Clause::OPERATOR_LESS;
+                break;
+                case '<=':
+                    $validOperator = Clause::OPERATOR_LESS_EQUAL;
+                break;
+                case 'BETWEEN':
+                    $validOperator = Clause::OPERATOR_BETWEEN;
+                break;
+                case 'NOT BETWEEN':
+                    $validOperator = Clause::OPERATOR_NOT_BETWEEN;
+                break;
+                case 'LIKE':
+                    $validOperator = Clause::OPERATOR_LIKE;
+                break;
+                case 'NOT LIKE':
+                    $validOperator = Clause::OPERATOR_NOT_LIKE;
+                break;
+                case 'IN':
+                    $validOperator = Clause::OPERATOR_IN;
+                break;
+                case 'NOT IN':
+                    $validOperator = Clause::OPERATOR_NOT_IN;
+                break;
+                case 'NULL':
+                case 'IS NULL':
+                    $validOperator = Clause::OPERATOR_NULL;
+                break;
+                case 'NOT NULL':
+                case 'IS NOT NULL':
+                    $validOperator = Clause::OPERATOR_NOT_NULL;
+                break;
+                default:
+                    $validOperator = Clause::OPERATOR_DEFAULT;
+            }
+        }
+        return $validOperator;
+    }
+
+    /**
+     * Checking input value
+     */
+    private static function getValue($value, int $operator)
+    {
+        switch ($operator) {
+            case Clause::OPERATOR_BETWEEN:
+            case Clause::OPERATOR_NOT_BETWEEN:
+                $valid = (is_array($value) && count($value) >= 2) ? true : false;
+                break;
+            case Clause::OPERATOR_IN:
+            case Clause::OPERATOR_NOT_IN:
+                $valid = is_array($value) ? true : false;
+            default:
+                $valid = true;
+        }
+        if ($valid) {
+            return $value;
+        } else {
+            throw new \Exception('Invalid input value for Where or Having clause');
+        }
+    }
+
+    /**
+     * Get appropriate conjunctive from input conjunctive
+     */
+    private static function getConjunctive(int $clauseType, int $conjunctive)
+    {
+        if ($clauseType == self::$clauseType) {
+            if ($conjunctive == Clause::CONJUNCTIVE_NONE) {
+                if (self::$nestedConjunctive == Clause::CONJUNCTIVE_NONE) return Clause::CONJUNCTIVE_AND;
+                else return self::$nestedConjunctive;
+            } else {
+                return $conjunctive;
+            }
+        }
+        return Clause::CONJUNCTIVE_NONE;
     }
 
 }

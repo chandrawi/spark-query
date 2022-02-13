@@ -2,6 +2,8 @@
 
 namespace SparkLib\SparkQuery\Structure;
 
+use SparkLib\SparkQuery\Structure\Table;
+
 class Column
 {
 
@@ -58,6 +60,64 @@ class Column
     public function function()
     {
         return $this->function;
+    }
+
+    /**
+     * Create column object from string input or ascossiative array with key as alias
+     */
+    public static function create($column): Column
+    {
+        $table = '';
+        $name = '';
+        $function = '';
+        $alias = '';
+        if (is_string($column)) {
+            list($table, $name, $function) = self::parseString($column);
+        } elseif (is_array($column)) {
+            list($table, $name, $function, $alias) = self::parseArray($column);
+        }
+        return new Column($table, $name, $alias, $function);
+    }
+
+    /**
+     * Parsing string input column to table, column name, and aggregate function
+     */
+    private static function parseString(string $column): array
+    {
+        $function = '';
+        if (substr($column, -1, 1) == ')' && false !== $pos = strpos($column, '(')) {
+            $function = substr($column, 0, $pos);
+            $column = substr($column, $pos+1, strlen($column)-$pos-2);
+        }
+        $exploded = explode('.', $column, 2);
+        if (count($exploded) == 2) {
+            $table = trim($exploded[0], "\"\`\'\r\n ");
+            $name = trim($exploded[1], "\"\`\'\r\n ");
+        } else {
+            $table = Table::$table;
+            $name = trim($column, "\"\`\'\r\n ");
+        }
+        return [$table, $name, $function];
+    }
+
+    /**
+     * Parsing array input column to table, column name, aggregate function, and alias name
+     */
+    private static function parseArray(array $column): array
+    {
+        $alias = '';
+        $keys = array_keys($column);
+        if (count($keys) == 1) {
+            is_int($keys[0]) ?: $alias = $keys[0];
+            $column = $column[$keys[0]];
+        }
+        $table = isset($column['table']) ? $column['table'] : Table::$table;
+        $name = isset($column['column']) ? $column['column'] : '';
+        $function = isset($column['function']) ? $column['function'] : '';
+        if (is_string($column)) {
+            list($table, $name, $function) = self::parseString($column);
+        }
+        return [$table, $name, $function, $alias];
     }
 
 }

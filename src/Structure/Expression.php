@@ -58,4 +58,14 @@ class Expression
         return $this->params;
     }
 
+    /**
+     * Create Expression object used in column list, where or having clause column, or group by column
+     */
+    public static function create(string $expression, string $alias = '', array $params = []): Expression
+    {
+        $exploded = explode('?', $expression);
+        $expressionObject = new Expression($exploded, $alias, $params);
+        return $expressionObject;
+    }
+
 }

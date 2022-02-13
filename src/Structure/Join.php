@@ -9,6 +9,11 @@ class Join
 {
 
     /**
+     * Base table name for query builder process
+     */
+    public static $table = '';
+
+    /**
      * Type of join of the table
      */
     private $joinType;
@@ -68,19 +73,6 @@ class Join
         $this->usingColumns = [];
     }
 
-    /**
-     * Add a join column with ON keyword or USING keyword
-     */
-    public function addJoinColumn(Column $column1, $column2)
-    {
-        if ($column2 instanceof Column) {
-            $this->baseColumns[] = $column1;
-            $this->joinColumns[] = $column2;
-        } else {
-            $this->usingColumns[] = $column1;
-        }
-    }
-
     /** Get join type */
     public function joinType(): int
     {
@@ -121,6 +113,75 @@ class Join
     public function usingColumns(): array
     {
         return $this->usingColumns;
+    }
+
+    /**
+     * Create join table object from joint type and input table
+     */
+    public static function create($joinTable, $joinType): Join
+    {
+        self::$table = Table::$table;
+        $validType = self::getType($joinType);
+        if (is_array($joinTable)) {
+            $joinAlias = strval(array_keys($joinTable)[0]);
+            $tableObject = new Join($validType, Table::$table, strval(array_values($joinTable)[0]), $joinAlias);
+            Table::$table = $joinAlias;
+        } else {
+            $joinTable = strval($joinTable);
+            $tableObject = new Join($validType, Table::$table, $joinTable);
+            Table::$table = $joinTable;
+        }
+        return $tableObject;
+    }
+
+    /**
+     * Add a JOIN table to Table list
+     */
+    private static function getType($joinType): int
+    {
+        if (is_int($joinType) && $joinType > 0 && $joinType <= 4) {
+            $validType = $joinType;
+        } else {
+            switch ($joinType) {
+                case 'INNER':
+                case 'INNER JOIN':
+                    $validType = Join::INNER_JOIN;
+                break;
+                case 'LEFT':
+                case 'LEFT JOIN':
+                    $validType = Join::LEFT_JOIN;
+                break;
+                case 'RIGHT':
+                case 'RIGHT JOIN':
+                    $validType = Join::RIGHT_JOIN;
+                break;
+                case 'OUTER':
+                case 'OUTER JOIN':
+                    $validType = Join::OUTER_JOIN;
+                break;
+                default:
+                    $validType = Join::NO_JOIN;
+            }
+        }
+        return $validType;
+    }
+
+    /**
+     * Edit join table object base and join columns Table object property
+     */
+    public function addColumn($column1, $column2 = null)
+    {
+        $table = Table::$table;
+        Table::$table = self::$table;
+        $columnObject1 = Column::create($column1);
+        Table::$table = $table;
+        if ($column2 === null) {
+            $this->usingColumns[] = $columnObject1;
+        } else {
+            $columnObject2 = Column::create($column2);
+            $this->baseColumns[] = $columnObject1;
+            $this->joinColumns[] = $columnObject2;
+        }
     }
 
 }

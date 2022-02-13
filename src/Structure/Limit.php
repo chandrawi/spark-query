@@ -39,4 +39,20 @@ class Limit
         return $this->offset;
     }
 
+    /**
+     * Create Limit object from input limit and offset for LIMIT query
+     */
+    public static function create($limit, $offset): Limit
+    {
+        $validLimit = Limit::NOT_SET;
+        $validOffset = Limit::NOT_SET;
+        if (is_int($limit)) {
+            if ($limit > 0) $validLimit = $offset;
+        }
+        if (is_int($offset)) {
+            if ($offset > 0) $validOffset = $offset;
+        }
+        return new Limit($validLimit, $validOffset);
+    }
+
 }

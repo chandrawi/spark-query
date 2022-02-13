@@ -2,6 +2,8 @@
 
 namespace SparkLib\SparkQuery\Structure;
 
+use SparkLib\SparkQuery\Structure\Table;
+
 class Value
 {
 
@@ -53,6 +55,46 @@ class Value
     public function values()
     {
         return $this->values;
+    }
+
+    /**
+     * Create Value object from ascossiative array with key as column or sequential array of array
+     */
+    public static function create(array $inputValue): Value
+    {
+        $columns = [];
+        $values = [];
+        $len = count($inputValue);
+        $lenRec = count($inputValue, 1);
+        if ($len == $lenRec) {
+            $columns = array_keys($inputValue);
+            $values = array_values($inputValue);
+        } elseif ($len + $len == $lenRec) {
+            if ($len == 2) {
+                list($columns, $values) = $inputValue;
+            } else {
+                list($columns, $values) = self::parsePair($inputValue);
+            }
+        }
+        return new Value(Table::$table, $columns, $values);
+    }
+
+    /**
+     * Parsing horizontal array and return vertical array
+     */
+    private static function parsePair(array $pairs): array
+    {
+        $columns = [];
+        $values = [];
+        foreach ($pairs as $pair) {
+            if (isset($pair[0]) && isset($pair[1])) {
+                $columns[] = $pair[0];
+                $values[] = $pair[1];
+            } else {
+                return [[], []];
+            }
+        }
+        return [$columns, $values];
     }
 
 }
