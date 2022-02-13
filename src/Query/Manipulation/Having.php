@@ -6,6 +6,7 @@ use SparkLib\SparkQuery\Query\Manipulation\BaseClause;
 use SparkLib\SparkQuery\Interfaces\IHaving;
 use SparkLib\SparkQuery\Structure\Column;
 use SparkLib\SparkQuery\Structure\Clause;
+use SparkLib\SparkQuery\Structure\Expression;
 
 class Having extends BaseClause
 {
@@ -14,12 +15,12 @@ class Having extends BaseClause
      * Constructor.
      * Set the builder object
      */
-    public function __construct($builderObject, $table = '', array $options = [], $statement = null)
+    public function __construct($builderObject, $translator = 0, $bindingOption = 0, $statement = null)
     {
         if ($builderObject instanceof IHaving) {
             $this->builder = $builderObject;
-            $this->table = $table;
-            $this->options = $options;
+            $this->translator = $translator;
+            $this->bindingOption = $bindingOption;
             $this->statement = $statement;
         } else {
             throw new \Exception('Builder object not support Having manipulation');
@@ -37,111 +38,106 @@ class Having extends BaseClause
 
     public function beginHaving()
     {
-        $this->beginNestedClause();
+        Clause::$nestedConjunctive = Clause::CONJUNCTIVE_NONE;
+        Clause::$nestedLevel--;
         return $this;
     }
 
     public function beginAndHaving()
     {
-        $this->nestedConjunctive = Clause::CONJUNCTIVE_AND_BEGIN;
+        Clause::$nestedConjunctive = Clause::CONJUNCTIVE_AND;
+        Clause::$nestedLevel--;
         return $this;
     }
 
     public function beginOrHaving()
     {
-        $this->nestedConjunctive = Clause::CONJUNCTIVE_OR_BEGIN;
+        Clause::$nestedConjunctive = Clause::CONJUNCTIVE_OR;
+        Clause::$nestedLevel--;
         return $this;
     }
 
     public function beginNotAndHaving()
     {
-        $this->nestedConjunctive = Clause::CONJUNCTIVE_NOT_AND_BEGIN;
+        Clause::$nestedConjunctive = Clause::CONJUNCTIVE_NOT_AND;
+        Clause::$nestedLevel--;
         return $this;
     }
 
     public function beginNotOrHaving()
     {
-        $this->nestedConjunctive = Clause::CONJUNCTIVE_NOT_OR_BEGIN;
+        Clause::$nestedConjunctive = Clause::CONJUNCTIVE_NOT_OR;
+        Clause::$nestedLevel--;
         return $this;
     }
 
     public function endHaving()
     {
-        $this->endNestedClause();
+        $lastClause = $this->builder->lastHaving();
+        if ($lastClause instanceof Clause) {
+            $lastLevel = $lastClause->level();
+            $lastClause->level($lastLevel+1);
+        }
         return $this;
     }
 
     /**
      * Add Clause object to having property of Builder object
-     * @param mixed $column
-     * @param mixed $operator
-     * @param mixed $values
-     * @param int $conjunctive
      */
-    public function addHaving($column, $operator, $values, int $conjunctive)
+    public function setHaving($column, $operator, $values, int $conjunctive)
     {
-        $clause = $this->createClause($column, $operator, $values, $conjunctive, $this->nestedConjunctive);
-        $this->nestedConjunctive = Clause::CONJUNCTIVE_NONE;
-        $this->builder->addHaving($clause);
+        $clauseObject = Clause::create(Clause::HAVING, $column, $operator, $values, $conjunctive);
+        $this->builder->addHaving($clauseObject);
         return $this;
     }
 
     public function having($column, string $operator, $values = null)
     {
-        $conjunctive = $this->getConjunctive(Clause::CONJUNCTIVE_AND);
-        return $this->addHaving($column, $operator, $values, $conjunctive);
+        return $this->setHaving($column, $operator, $values, Clause::CONJUNCTIVE_NONE);
     }
 
     public function andHaving($column, string $operator, $values = null)
     {
-        $conjunctive = $this->getConjunctive(Clause::CONJUNCTIVE_AND);
-        return $this->addHaving($column, $operator, $values, $conjunctive);
+        return $this->setHaving($column, $operator, $values, Clause::CONJUNCTIVE_AND);
     }
 
     public function orHaving($column, string $operator, $values = null)
     {
-        $conjunctive = $this->getConjunctive(Clause::CONJUNCTIVE_OR);
-        return $this->addHaving($column, $operator, $values, $conjunctive);
+        return $this->setHaving($column, $operator, $values, Clause::CONJUNCTIVE_OR);
     }
 
     public function notAndHaving($column, string $operator, $values = null)
     {
-        $conjunctive = $this->getConjunctive(Clause::CONJUNCTIVE_NOT_AND);
-        return $this->addHaving($column, $operator, $values, $conjunctive);
+        return $this->setHaving($column, $operator, $values, Clause::CONJUNCTIVE_NOT_AND);
     }
 
     public function notOrHaving($column, string $operator, $values = null)
     {
-        $conjunctive = $this->getConjunctive(Clause::CONJUNCTIVE_NOT_OR);
-        return $this->addHaving($column, $operator, $values, $conjunctive);
+        return $this->setHaving($column, $operator, $values, Clause::CONJUNCTIVE_NOT_OR);
     }
 
     public function havingExpression(string $expression, string $operator, $values = null, array $params = [])
     {
-        $conjunctive = $this->getConjunctive(Clause::CONJUNCTIVE_AND);
-        $expressionObject = $this->createExpression($expression, '', $params);
-        return $this->addHaving($expressionObject, $operator, $values, $conjunctive);
+        $expressionObject = Expression::create($expression, '', $params);
+        return $this->setHaving($expressionObject, $operator, $values, Clause::CONJUNCTIVE_AND);
     }
 
     public function orHavingExpression(string $expression, string $operator, $values = null, array $params = [])
     {
-        $conjunctive = $this->getConjunctive(Clause::CONJUNCTIVE_OR);
-        $expressionObject = $this->createExpression($expression, '', $params);
-        return $this->addHaving($expressionObject, $operator, $values, $conjunctive);
+        $expressionObject = Expression::create($expression, '', $params);
+        return $this->setHaving($expressionObject, $operator, $values, Clause::CONJUNCTIVE_OR);
     }
 
     public function notAndHavingExpression(string $expression, string $operator, $values = null, array $params = [])
     {
-        $conjunctive = $this->getConjunctive(Clause::CONJUNCTIVE_NOT_AND);
-        $expressionObject = $this->createExpression($expression, '', $params);
-        return $this->addHaving($expressionObject, $operator, $values, $conjunctive);
+        $expressionObject = Expression::create($expression, '', $params);
+        return $this->setHaving($expressionObject, $operator, $values, Clause::CONJUNCTIVE_NOT_AND);
     }
 
     public function notOrHavingExpression(string $expression, string $operator, $values = null, array $params = [])
     {
-        $conjunctive = $this->getConjunctive(Clause::CONJUNCTIVE_NOT_OR);
-        $expressionObject = $this->createExpression($expression, '', $params);
-        return $this->addHaving($expressionObject, $operator, $values, $conjunctive);
+        $expressionObject = Expression::create($expression, '', $params);
+        return $this->setHaving($expressionObject, $operator, $values, Clause::CONJUNCTIVE_NOT_OR);
     }
 
 }

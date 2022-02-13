@@ -1,6 +1,6 @@
 <?php
 
-namespace SparkLib\SparkQuery\Query\Basic;
+namespace SparkLib\SparkQuery\Query;
 
 use SparkLib\SparkQuery\Query\BaseQuery;
 use SparkLib\SparkQuery\Query\Manipulation\Where;
@@ -11,6 +11,9 @@ use SparkLib\SparkQuery\Query\Manipulation\LimitOffset;
 use SparkLib\SparkQuery\Query\Manipulation\JoinTable;
 use SparkLib\SparkQuery\Builder\BaseBuilder;
 use SparkLib\SparkQuery\Builder\SelectBuilder;
+use SparkLib\SparkQuery\Structure\Table;
+use SparkLib\SparkQuery\Structure\Column;
+use SparkLib\SparkQuery\Structure\Expression;
 
 class Select extends BaseQuery
 {
@@ -18,12 +21,12 @@ class Select extends BaseQuery
     /**
      * Constructor. Set builder type to select
      */
-    public function __construct($builder = null, $table = '', array $options = [], $statement = null)
+    public function __construct($builder = null, $translator = 0, $bindingOption = 0, $statement = null)
     {
         $this->builder = $builder instanceof SelectBuilder ? $builder : new SelectBuilder;
         $this->builder->builderType(BaseBuilder::SELECT);
-        $this->table = $table;
-        $this->options = $options;
+        $this->translator = $translator;
+        $this->bindingOption = $bindingOption;
         $this->statement = $statement;
     }
 
@@ -35,7 +38,8 @@ class Select extends BaseQuery
     public function select($table)
     {
         if ($table) {
-            $this->table($table);
+            $tableObject = Table::create($table);
+            $this->builder->setTable($tableObject);
         } else {
             throw new \Exception('Table name is not defined');
         }
@@ -60,7 +64,7 @@ class Select extends BaseQuery
      */
     public function column($column)
     {
-        $columnObject = $this->createColumn($column);
+        $columnObject = Column::create($column);
         $this->builder->addColumn($columnObject);
         return $this;
     }
@@ -73,7 +77,7 @@ class Select extends BaseQuery
     public function columns(array $columns)
     {
         foreach ($columns as $alias => $column) {
-            $columnObject = $this->createColumn([$alias => $column]);
+            $columnObject = Column::create([$alias => $column]);
             $this->builder->addColumn($columnObject);
         }
         return $this;
@@ -86,7 +90,7 @@ class Select extends BaseQuery
      */
     public function columnExpression(string $expression, string $alias = '', array $params = [])
     {
-        $expressionObject = $this->createExpression($expression, $alias, $params);
+        $expressionObject = Expression::create($expression, $alias, $params);
         $this->builder->addColumn($expressionObject);
         return $this;
     }
@@ -96,7 +100,7 @@ class Select extends BaseQuery
      */
     private function whereManipulation()
     {
-        return new Where($this->builder, $this->table, $this->options, $this->statement);
+        return new Where($this->builder, $this->translator, $this->bindingOption, $this->statement);
     }
 
     /** WHERE query manipulation method */
@@ -134,7 +138,7 @@ class Select extends BaseQuery
      */
     private function havingManipulation()
     {
-        return new Having($this->builder, $this->table, $this->options, $this->statement);
+        return new Having($this->builder, $this->translator, $this->bindingOption, $this->statement);
     }
 
     /** HAVING query manipulation method */
@@ -172,7 +176,7 @@ class Select extends BaseQuery
      */
     private function groupByManipulation()
     {
-        return new GroupBy($this->builder, $this->table, $this->options, $this->statement);
+        return new GroupBy($this->builder, $this->translator, $this->bindingOption, $this->statement);
     }
 
     /** GROUP BY query manipulation method */
@@ -192,19 +196,13 @@ class Select extends BaseQuery
      */
     private function orderByManipulation()
     {
-        return new OrderBy($this->builder, $this->table, $this->options, $this->statement);
+        return new OrderBy($this->builder, $this->translator, $this->bindingOption, $this->statement);
     }
 
     /** ORDER BY query manipulation method */
     public function orderBy($column, $orderType)
     {
         return $this->orderByManipulation()->orderBy($column, $orderType);
-    }
-
-    /** ORDER BY query manipulation method */
-    public function ordersBy(array $orders)
-    {
-        return $this->orderByManipulation()->ordersBy($orders);
     }
 
     /** ORDER BY query manipulation method */
@@ -224,11 +222,11 @@ class Select extends BaseQuery
      */
     private function limitOffsetManipulation()
     {
-        return new LimitOffset($this->builder, $this->table, $this->options, $this->statement);
+        return new LimitOffset($this->builder, $this->translator, $this->bindingOption, $this->statement);
     }
 
     /** LIMIT query manipulation method */
-    public function limit(int $limit, int $offset = null)
+    public function limit($limit, $offset = null)
     {
         return $this->limitOffsetManipulation()->limit($limit, $offset);
     }
@@ -244,7 +242,7 @@ class Select extends BaseQuery
      */
     private function joinTableManipulation()
     {
-        return new JoinTable($this->builder, $this->table, $this->options, $this->statement);
+        return new JoinTable($this->builder, $this->translator, $this->bindingOption, $this->statement);
     }
 
     /** JOIN query manipulation method */

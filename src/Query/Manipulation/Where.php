@@ -6,6 +6,7 @@ use SparkLib\SparkQuery\Query\Manipulation\BaseClause;
 use SparkLib\SparkQuery\Interfaces\IWhere;
 use SparkLib\SparkQuery\Structure\Column;
 use SparkLib\SparkQuery\Structure\Clause;
+use SparkLib\SparkQuery\Structure\Expression;
 
 class Where extends BaseClause
 {
@@ -14,12 +15,12 @@ class Where extends BaseClause
      * Constructor.
      * Set the builder object
      */
-    public function __construct($builderObject, $table = '', array $options = [], $statement = null)
+    public function __construct($builderObject, $translator = 0, $bindingOption = 0, $statement = null)
     {
         if ($builderObject instanceof IWhere) {
             $this->builder = $builderObject;
-            $this->table = $table;
-            $this->options = $options;
+            $this->translator = $translator;
+            $this->bindingOption = $bindingOption;
             $this->statement = $statement;
         } else {
             throw new \Exception('Builder object not support Where manipulation');
@@ -37,111 +38,107 @@ class Where extends BaseClause
 
     public function beginWhere()
     {
-        $this->beginNestedClause();
+        Clause::$nestedConjunctive = Clause::CONJUNCTIVE_NONE;
+        Clause::$nestedLevel--;
+        print(Clause::$nestedLevel);exit();
         return $this;
     }
 
     public function beginAndWhere()
     {
-        $this->nestedConjunctive = Clause::CONJUNCTIVE_AND_BEGIN;
+        Clause::$nestedConjunctive = Clause::CONJUNCTIVE_AND;
+        Clause::$nestedLevel--;
         return $this;
     }
 
     public function beginOrWhere()
     {
-        $this->nestedConjunctive = Clause::CONJUNCTIVE_OR_BEGIN;
+        Clause::$nestedConjunctive = Clause::CONJUNCTIVE_OR;
+        Clause::$nestedLevel--;
         return $this;
     }
 
     public function beginNotAndWhere()
     {
-        $this->nestedConjunctive = Clause::CONJUNCTIVE_NOT_AND_BEGIN;
+        Clause::$nestedConjunctive = Clause::CONJUNCTIVE_NOT_AND;
+        Clause::$nestedLevel--;
         return $this;
     }
 
     public function beginNotOrWhere()
     {
-        $this->nestedConjunctive = Clause::CONJUNCTIVE_NOT_OR_BEGIN;
+        Clause::$nestedConjunctive = Clause::CONJUNCTIVE_NOT_OR;
+        Clause::$nestedLevel--;
         return $this;
     }
 
     public function endWhere()
     {
-        $this->endNestedClause();
+        $lastClause = $this->builder->lastWhere();
+        if ($lastClause instanceof Clause) {
+            $lastLevel = $lastClause->level();
+            $lastClause->level($lastLevel+1);
+        }
         return $this;
     }
 
     /**
      * Add Clause object to where property of Builder object
-     * @param mixed $column
-     * @param mixed $operator
-     * @param mixed $values
-     * @param int $conjunctive
      */
-    public function addWhere($column, $operator, $values, int $conjunctive)
+    public function setWhere($column, $operator, $values, int $conjunctive)
     {
-        $clause = $this->createClause($column, $operator, $values, $conjunctive, $this->nestedConjunctive);
-        $this->nestedConjunctive = Clause::CONJUNCTIVE_NONE;
-        $this->builder->addWhere($clause);
+        $clauseObject = Clause::create(Clause::WHERE, $column, $operator, $values, $conjunctive);
+        $this->builder->addWhere($clauseObject);
         return $this;
     }
 
     public function where($column, string $operator, $values = null)
     {
-        $conjunctive = $this->getConjunctive(Clause::CONJUNCTIVE_AND);
-        return $this->addWhere($column, $operator, $values, $conjunctive);
+        return $this->setWhere($column, $operator, $values, Clause::CONJUNCTIVE_NONE);
     }
 
     public function andWhere($column, string $operator, $values = null)
     {
-        $conjunctive = $this->getConjunctive(Clause::CONJUNCTIVE_AND);
-        return $this->addWhere($column, $operator, $values, $conjunctive);
+        return $this->setWhere($column, $operator, $values, Clause::CONJUNCTIVE_AND);
     }
 
     public function orWhere($column, string $operator, $values = null)
     {
-        $conjunctive = $this->getConjunctive(Clause::CONJUNCTIVE_OR);
-        return $this->addWhere($column, $operator, $values, $conjunctive);
+        return $this->setWhere($column, $operator, $values, Clause::CONJUNCTIVE_OR);
     }
 
     public function notAndWhere($column, string $operator, $values = null)
     {
-        $conjunctive = $this->getConjunctive(Clause::CONJUNCTIVE_NOT_AND);
-        return $this->addWhere($column, $operator, $values, $conjunctive);
+        return $this->setWhere($column, $operator, $values, Clause::CONJUNCTIVE_NOT_AND);
     }
 
     public function notOrWhere($column, string $operator, $values = null)
     {
-        $conjunctive = $this->getConjunctive(Clause::CONJUNCTIVE_NOT_OR);
-        return $this->addWhere($column, $operator, $values, $conjunctive);
+        return $this->setWhere($column, $operator, $values, Clause::CONJUNCTIVE_NOT_OR);
     }
 
     public function whereExpression(string $expression, string $operator, $values = null, array $params = [])
     {
-        $conjunctive = $this->getConjunctive(Clause::CONJUNCTIVE_AND);
-        $expressionObject = $this->createExpression($expression, '', $params);
-        return $this->addWhere($expressionObject, $operator, $values, $conjunctive);
+        $expressionObject = Expression::create($expression, '', $params);
+        return $this->setWhere($expressionObject, $operator, $values, Clause::CONJUNCTIVE_AND);
     }
 
     public function orWhereExpression(string $expression, string $operator, $values = null, array $params = [])
     {
-        $conjunctive = $this->getConjunctive(Clause::CONJUNCTIVE_OR);
-        $expressionObject = $this->createExpression($expression, '', $params);
-        return $this->addWhere($expressionObject, $operator, $values, $conjunctive);
+        $expressionObject = Expression::create($expression, '', $params);
+        return $this->setWhere($expressionObject, $operator, $values, Clause::CONJUNCTIVE_OR);
     }
 
     public function notAndWhereExpression(string $expression, string $operator, $values = null, array $params = [])
     {
-        $conjunctive = $this->getConjunctive(Clause::CONJUNCTIVE_NOT_AND);
-        $expressionObject = $this->createExpression($expression, '', $params);
-        return $this->addWhere($expressionObject, $operator, $values, $conjunctive);
+        $expressionObject = Expression::create($expression, '', $params);
+        return $this->setWhere($expressionObject, $operator, $values, Clause::CONJUNCTIVE_NOT_AND);
     }
 
     public function notOrWhereExpression(string $expression, string $operator, $values = null, array $params = [])
     {
-        $conjunctive = $this->getConjunctive(Clause::CONJUNCTIVE_NOT_OR);
-        $expressionObject = $this->createExpression($expression, '', $params);
-        return $this->addWhere($expressionObject, $operator, $values, $conjunctive);
+        $expressionObject = Expression::create($expression, '', $params);
+        return $this->setWhere($expressionObject, $operator, $values, Clause::CONJUNCTIVE_NOT_OR);
     }
 
 }

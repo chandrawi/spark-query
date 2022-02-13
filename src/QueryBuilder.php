@@ -3,10 +3,10 @@
 namespace SparkLib\SparkQuery;
 
 use SparkLib\SparkQuery\Query\BaseQuery;
-use SparkLib\SparkQuery\Query\Basic\Select;
-use SparkLib\SparkQuery\Query\Basic\Insert;
-use SparkLib\SparkQuery\Query\Basic\Update;
-use SparkLib\SparkQuery\Query\Basic\Delete;
+use SparkLib\SparkQuery\Query\Select;
+use SparkLib\SparkQuery\Query\Insert;
+use SparkLib\SparkQuery\Query\Update;
+use SparkLib\SparkQuery\Query\Delete;
 use SparkLib\SparkQuery\Builder\SelectBuilder;
 use SparkLib\SparkQuery\Builder\InsertBuilder;
 use SparkLib\SparkQuery\Builder\UpdateBuilder;
@@ -16,10 +16,14 @@ class QueryBuilder
 {
 
     /**
-     * Default query translator and binding mode option
-     * @var $translator
+     * Default query translator
      */
-    private $options;
+    private int $translator;
+
+    /**
+     * Default binding mode option
+     */
+    private int $bindingOption;
 
     /**
      * Callable of statement function
@@ -28,17 +32,16 @@ class QueryBuilder
 
     /**
      * Default table name
-     * @var $table
      */
-    private $table = '';
+    private string $table = '';
 
     /**
      * Constructor. Set options and create query translator object
      */
     public function __construct(int $translator = QueryTranslator::TRANSLATOR_MYSQL, int $bindingOption = QueryTranslator::PARAM_NUM)
     {
-        // $this->options = QueryTranslator::getBindingOption($bindingOption);
-        $this->options = [$translator, $bindingOption];
+        $this->translator = $translator;
+        $this->bindingOption = $bindingOption;
         $this->statement = null;
     }
 
@@ -70,7 +73,7 @@ class QueryBuilder
     public function select($table = null)
     {
         $table !== null ?: $table = $this->table;
-        $selectQuery = new Select(null, $table, $this->options, $this->statement);
+        $selectQuery = new Select(null, $this->translator, $this->bindingOption, $this->statement);
         return $selectQuery->select($table);
     }
 
@@ -82,7 +85,7 @@ class QueryBuilder
     public function selectDistinct($table = null)
     {
         $table !== null ?: $table = $this->table;
-        $selectQuery = new Select(null, $table, $this->options, $this->statement);
+        $selectQuery = new Select(null, $this->translator, $this->bindingOption, $this->statement);
         return $selectQuery->selectDistinct($table);
     }
 
@@ -94,7 +97,7 @@ class QueryBuilder
     public function insert($table = null)
     {
         $table !== null ?: $table = $this->table;
-        $insertQuery = new Insert(null, $table, $this->options, $this->statement);
+        $insertQuery = new Insert(null, $this->translator, $this->bindingOption, $this->statement);
         return $insertQuery->insert($table);
     }
 
@@ -106,7 +109,7 @@ class QueryBuilder
     public function insertCopy($table = null)
     {
         $table !== null ?: $table = $this->table;
-        $insertQuery = new Insert(null, $table, $this->options, $this->statement);
+        $insertQuery = new Insert(null, $this->translator, $this->bindingOption, $this->statement);
         return $insertQuery->insertCopy($table);
     }
 
@@ -118,7 +121,7 @@ class QueryBuilder
     public function update($table = null)
     {
         $table !== null ?: $table = $this->table;
-        $updateQuery = new Update(null, $table, $this->options, $this->statement);
+        $updateQuery = new Update(null, $this->translator, $this->bindingOption, $this->statement);
         return $updateQuery->update($table);
     }
 
@@ -130,7 +133,7 @@ class QueryBuilder
     public function delete($table = null)
     {
         $table !== null ?: $table = $this->table;
-        $deleteQuery = new Delete(null, $table, $this->options, $this->statement);
+        $deleteQuery = new Delete(null, $this->translator, $this->bindingOption, $this->statement);
         return $deleteQuery->delete($table);
     }
 

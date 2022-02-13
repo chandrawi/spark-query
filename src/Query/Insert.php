@@ -1,12 +1,13 @@
 <?php
 
-namespace SparkLib\SparkQuery\Query\Basic;
+namespace SparkLib\SparkQuery\Query;
 
 use SparkLib\SparkQuery\Query\BaseQuery;
-use SparkLib\SparkQuery\Query\Manipulation\Where;
 use SparkLib\SparkQuery\Query\Manipulation\LimitOffset;
 use SparkLib\SparkQuery\Builder\BaseBuilder;
 use SparkLib\SparkQuery\Builder\InsertBuilder;
+use SparkLib\SparkQuery\Structure\Table;
+use SparkLib\SparkQuery\Structure\Value;
 
 class Insert extends BaseQuery
 {
@@ -14,12 +15,12 @@ class Insert extends BaseQuery
     /**
      * Constructor. Set builder type to insert
      */
-    public function __construct($builder = null, string $table = '', array $options = [], $statement = null)
+    public function __construct($builder = null, $translator = 0, $bindingOption = 0, $statement = null)
     {
         $this->builder = $builder instanceof InsertBuilder ? $builder : new InsertBuilder;
         $this->builder->builderType(BaseBuilder::INSERT);
-        $this->table = $table;
-        $this->options = $options;
+        $this->translator = $translator;
+        $this->bindingOption = $bindingOption;
         $this->statement = $statement;
     }
 
@@ -31,7 +32,8 @@ class Insert extends BaseQuery
     public function insert($table)
     {
         if ($table) {
-            $this->table($table);
+            $tableObject = Table::create($table);
+            $this->builder->setTable($tableObject);
         } else {
             throw new \Exception('Table name is not defined');
         }
@@ -56,7 +58,7 @@ class Insert extends BaseQuery
      */
     public function values(array $values)
     {
-        $valueObject = $this->createValue($values);
+        $valueObject = Value::create($values);
         $this->builder->addValue($valueObject);
         return $this;
     }
@@ -69,7 +71,7 @@ class Insert extends BaseQuery
     public function multiValues(array $multiValues)
     {
         foreach ($multiValues as $values) {
-            $valueObject = $this->createValue($values);
+            $valueObject = Value::create($values);
             $this->builder->addValue($valueObject);
         }
         return $this;
@@ -80,11 +82,11 @@ class Insert extends BaseQuery
      */
     private function limitOffsetManipulation()
     {
-        return new LimitOffset($this->builder, $this->table, $this->options, $this->statement);
+        return new LimitOffset($this->builder, Table::$table, $this->options, $this->statement);
     }
 
     /** LIMIT query manipulation method */
-    public function limit(int $limit, int $offset = null)
+    public function limit($limit, $offset = null)
     {
         return $this->limitOffsetManipulation()->limit($limit, $offset);
     }

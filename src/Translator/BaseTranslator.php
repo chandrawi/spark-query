@@ -2,7 +2,7 @@
 
 namespace SparkLib\SparkQuery\Translator;
 
-use SparkLib\SparkQuery\Query\QueryObject;
+use SparkLib\SparkQuery\QueryObject;
 use SparkLib\SparkQuery\Builder\BaseBuilder;
 use SparkLib\SparkQuery\Structure\Table;
 use SparkLib\SparkQuery\Structure\Column;
@@ -12,7 +12,6 @@ use SparkLib\SparkQuery\Structure\Join;
 use SparkLib\SparkQuery\Structure\Clause;
 use SparkLib\SparkQuery\Structure\Order;
 use SparkLib\SparkQuery\Structure\Limit;
-use SparkLib\SparkQuery\Interfaces\ITranslator;
 
 class BaseTranslator
 {
@@ -405,33 +404,27 @@ class BaseTranslator
                 return ' NOT AND ';
             case Clause::CONJUNCTIVE_NOT_OR:
                 return ' NOT OR ';
-            case Clause::CONJUNCTIVE_BEGIN:
-                return $this->OPEN_BRACKET;
-            case Clause::CONJUNCTIVE_AND_BEGIN:
-                return ' AND '. $this->OPEN_BRACKET;
-            case Clause::CONJUNCTIVE_OR_BEGIN:
-                return ' OR '. $this->OPEN_BRACKET;
-            case Clause::CONJUNCTIVE_NOT_AND_BEGIN:
-                return ' NOT AND '. $this->OPEN_BRACKET;
-            case Clause::CONJUNCTIVE_NOT_OR_BEGIN:
-                return ' NOT OR '. $this->OPEN_BRACKET;
-            case Clause::CONJUNCTIVE_END:
-                return $this->CLOSE_BRACKET;
+            default:
+                return '';
         }
-        if ($conjunctive < Clause::CONJUNCTIVE_BEGIN) {
-            $open = $this->OPEN_BRACKET;
-            for ($i = $conjunctive; $i < Clause::CONJUNCTIVE_BEGIN; $i++) {
-                $open .= $this->OPEN_BRACKET;
+    }
+
+    /**
+     * Get open or close bracket based on input level
+     */
+    protected function brackets(int $level): string
+    {
+        $string = '';
+        if ($level < 0) {
+            for ($i=$level; $i<0; $i++) {
+                $string .= $this->OPEN_BRACKET;
             }
-            return $open;
-        } elseif ($conjunctive > Clause::CONJUNCTIVE_END) {
-            $close = $this->CLOSE_BRACKET;
-            for ($i = $conjunctive; $i > Clause::CONJUNCTIVE_END; $i--) {
-                $close .= $this->CLOSE_BRACKET;
+        } elseif ($level > 0) {
+            for ($i=0; $i<$level; $i++) {
+                $string .= $this->CLOSE_BRACKET;
             }
-            return $close;
         }
-        return '';
+        return $string;
     }
 
     /**
@@ -442,14 +435,16 @@ class BaseTranslator
         if ($count) {
             $query->add(' WHERE ');
             foreach ($whereClauses as $where) {
-                $nCon = $where->nestedConjunctive();
-                $nestedConjunctive = $this->conjunctive($nCon);
-                $conjunctive = $this->conjunctive($where->conjunctive());
-
-                $nCon >= Clause::CONJUNCTIVE_END ?: $query->add($nestedConjunctive);
-                $query->add($conjunctive);
-                $this->clause($query, $where, $multiTableFlag);
-                $nCon < Clause::CONJUNCTIVE_END ?: $query->add($nestedConjunctive);
+                if ($where instanceof Clause) {
+                    $conjunctive = $this->conjunctive($where->conjunctive());
+                    $nestedLevel = $where->level();
+                    print($nestedLevel);print("\n");
+    
+                    $query->add($conjunctive);
+                    if ($nestedLevel < 0) $query->add($this->brackets($nestedLevel));
+                    $this->clause($query, $where, $multiTableFlag);
+                    if ($nestedLevel > 0) $query->add($this->brackets($nestedLevel));
+                }
             }
         }
     }
@@ -462,14 +457,15 @@ class BaseTranslator
         if ($count) {
             $query->add(' HAVING ');
             foreach ($havingClauses as $having) {
-                $nCon = $having->nestedConjunctive();
-                $nestedConjunctive = $this->conjunctive($nCon);
-                $conjunctive = $this->conjunctive($having->conjunctive());
+                if ($having instanceof Clause) {
+                    $conjunctive = $this->conjunctive($having->conjunctive());
+                    $nestedLevel = $having->level();
     
-                $nCon == Clause::CONJUNCTIVE_END ?: $query->add($nestedConjunctive);
-                $query->add($conjunctive);
-                $this->clause($query, $having, $multiTableFlag);
-                $nCon != Clause::CONJUNCTIVE_END ?: $query->add($nestedConjunctive);
+                    $query->add($conjunctive);
+                    if ($nestedLevel < 0) $query->add($this->brackets($nestedLevel));
+                    $this->clause($query, $having, $multiTableFlag);
+                    if ($nestedLevel > 0) $query->add($this->brackets($nestedLevel));
+                }
             }
         }
     }
@@ -482,7 +478,7 @@ class BaseTranslator
         if ($clause instanceof Clause) {
             $this->column($query, $clause->column(), $multiTableFlag) ?: $this->expression($query, $clause->column());
             $operator = $clause->operator();
-            $values = $clause->values();
+            $values = $clause->value();
 
             switch ($operator) {
                 case Clause::OPERATOR_BETWEEN:

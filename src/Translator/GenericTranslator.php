@@ -3,14 +3,13 @@
 namespace SparkLib\SparkQuery\Translator;
 
 use SparkLib\SparkQuery\Translator\BaseTranslator;
-use SparkLib\SparkQuery\Query\QueryObject;
+use SparkLib\SparkQuery\QueryObject;
 use SparkLib\SparkQuery\Builder\SelectBuilder;
 use SparkLib\SparkQuery\Builder\InsertBuilder;
 use SparkLib\SparkQuery\Builder\UpdateBuilder;
 use SparkLib\SparkQuery\Builder\DeleteBuilder;
-use SparkLib\SparkQuery\Interfaces\ITranslator;
 
-class GenericTranslator extends BaseTranslator implements ITranslator
+class GenericTranslator extends BaseTranslator
 {
 
     /** ITranslator required method */

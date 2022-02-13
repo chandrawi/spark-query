@@ -13,12 +13,12 @@ class LimitOffset extends BaseQuery
      * Constructor.
      * Set the builder object
      */
-    public function __construct($builderObject, $table = '', array $options = [], $statement = null)
+    public function __construct($builderObject, $translator = 0, $bindingOption = 0, $statement = null)
     {
         if ($builderObject instanceof ILimit) {
             $this->builder = $builderObject;
-            $this->table = $table;
-            $this->options = $options;
+            $this->translator = $translator;
+            $this->bindingOption = $bindingOption;
             $this->statement = $statement;
         } else {
             throw new \Exception('Builder object not support LimitOffset manipulation');
@@ -36,28 +36,20 @@ class LimitOffset extends BaseQuery
 
     /**
      * LIMIT query manipulation
-     * @param int $limit
-     * @param mixed $offset
-     * @return this
      */
-    public function limit(int $limit, $offset)
+    public function limit($limit, $offset)
     {
-        is_int($offset) ?: $offset = Limit::NOT_SET;
-        $limitObject = new Limit($limit, $offset);
+        $limitObject = Limit::create($limit, $offset);
         $this->builder->setLimit($limitObject);
         return $this;
     }
 
     /**
      * OFFSET query manipulation
-     * @param int $offset
-     * @return this
      */
-    public function offset(int $offset)
+    public function offset($offset)
     {
-        $limitObject = new Limit(Limit::NOT_SET, $offset);
-        $this->builder->setLimit($limitObject);
-        return $this;
+        return $this->limit(Limit::NOT_SET, $offset);
     }
 
 }

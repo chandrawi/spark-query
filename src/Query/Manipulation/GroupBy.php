@@ -13,12 +13,12 @@ class GroupBy extends BaseQuery
      * Constructor.
      * Set the builder object
      */
-    public function __construct($builderObject, $table = '', array $options = [], $statement = null)
+    public function __construct($builderObject, $translator = 0, $bindingOption = 0, $statement = null)
     {
         if ($builderObject instanceof IGroupBy) {
             $this->builder = $builderObject;
-            $this->table = $table;
-            $this->options = $options;
+            $this->translator = $translator;
+            $this->bindingOption = $bindingOption;
             $this->statement = $statement;
         } else {
             throw new \Exception('Builder object not support GroupBy manipulation');
@@ -36,20 +36,16 @@ class GroupBy extends BaseQuery
 
     /**
      * GROUP BY query manipulation
-     * @param mixed $column
-     * @return this
      */
     public function groupBy($column)
     {
-        $columnObject = $this->createColumn($column);
+        $columnObject = Column::create($column);
         $this->builder->addGroup($columnObject);
         return $this;
     }
 
     /**
      * GROUP BY query manipulation with multiple inputs
-     * @param mixed $column
-     * @return this
      */
     public function groupsBy(array $columns)
     {

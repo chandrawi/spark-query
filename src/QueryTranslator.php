@@ -2,8 +2,8 @@
 
 namespace SparkLib\SparkQuery;
 
+use SparkLib\SparkQuery\QueryObject;
 use SparkLib\SparkQuery\Query\BaseQuery;
-use SparkLib\SparkQuery\Query\QueryObject;
 use SparkLib\SparkQuery\Builder\SelectBuilder;
 use SparkLib\SparkQuery\Builder\InsertBuilder;
 use SparkLib\SparkQuery\Builder\UpdateBuilder;

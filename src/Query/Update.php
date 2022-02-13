@@ -1,6 +1,6 @@
 <?php
 
-namespace SparkLib\SparkQuery\Query\Basic;
+namespace SparkLib\SparkQuery\Query;
 
 use SparkLib\SparkQuery\Query\BaseQuery;
 use SparkLib\SparkQuery\Query\Manipulation\Where;
@@ -8,6 +8,8 @@ use SparkLib\SparkQuery\Query\Manipulation\LimitOffset;
 use SparkLib\SparkQuery\Query\Manipulation\JoinTable;
 use SparkLib\SparkQuery\Builder\BaseBuilder;
 use SparkLib\SparkQuery\Builder\UpdateBuilder;
+use SparkLib\SparkQuery\Structure\Table;
+use SparkLib\SparkQuery\Structure\Value;
 
 class Update extends BaseQuery
 {
@@ -15,12 +17,12 @@ class Update extends BaseQuery
     /**
      * Constructor. Set builder type to insert
      */
-    public function __construct($builder = null, string $table = '', array $options = [], $statement = null)
+    public function __construct($builder = null, $translator = 0, $bindingOption = 0, $statement = null)
     {
         $this->builder = $builder instanceof UpdateBuilder ? $builder : new UpdateBuilder;
         $this->builder->builderType(BaseBuilder::UPDATE);
-        $this->table = $table;
-        $this->options = $options;
+        $this->translator = $translator;
+        $this->bindingOption = $bindingOption;
         $this->statement = $statement;
     }
 
@@ -32,7 +34,8 @@ class Update extends BaseQuery
     public function update($table)
     {
         if ($table) {
-            $this->table($table);
+            $tableObject = Table::create($table);
+            $this->builder->setTable($tableObject);
         } else {
             throw new \Exception('Table name is not defined');
         }
@@ -46,7 +49,7 @@ class Update extends BaseQuery
      */
     public function values(array $values)
     {
-        $valueObject = $this->createValue($values);
+        $valueObject = Value::create($values);
         $this->builder->addValue($valueObject);
         return $this;
     }
@@ -56,7 +59,7 @@ class Update extends BaseQuery
      */
     private function whereManipulation()
     {
-        return new Where($this->builder, $this->table, $this->options, $this->statement);
+        return new Where($this->builder, $this->translator, $this->bindingOption, $this->statement);
     }
 
     /** WHERE query manipulation method */
@@ -94,11 +97,11 @@ class Update extends BaseQuery
      */
     private function limitOffsetManipulation()
     {
-        return new LimitOffset($this->builder, $this->table, $this->options, $this->statement);
+        return new LimitOffset($this->builder, $this->translator, $this->bindingOption, $this->statement);
     }
 
     /** LIMIT query manipulation method */
-    public function limit(int $limit, int $offset = null)
+    public function limit($limit, $offset = null)
     {
         return $this->limitOffsetManipulation()->limit($limit, $offset);
     }
@@ -114,7 +117,7 @@ class Update extends BaseQuery
      */
     private function joinTableManipulation()
     {
-        return new JoinTable($this->builder, $this->table, $this->options, $this->statement);
+        return new JoinTable($this->builder, $this->translator, $this->bindingOption, $this->statement);
     }
 
     /** JOIN query manipulation method */

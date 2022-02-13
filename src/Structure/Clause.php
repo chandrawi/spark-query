@@ -87,27 +87,15 @@ class Clause
     private $level;
 
     /** Conjunctive type */
-    public const CONJUNCTIVE_BEGIN = 1;
+    public const CONJUNCTIVE_NONE = 0;
     /** Conjunctive type */
-    public const CONJUNCTIVE_AND_BEGIN = 2;
+    public const CONJUNCTIVE_AND = 1;
     /** Conjunctive type */
-    public const CONJUNCTIVE_OR_BEGIN = 3;
+    public const CONJUNCTIVE_OR = 2;
     /** Conjunctive type */
-    public const CONJUNCTIVE_NOT_AND_BEGIN = 4;
+    public const CONJUNCTIVE_NOT_AND = 3;
     /** Conjunctive type */
-    public const CONJUNCTIVE_NOT_OR_BEGIN = 5;
-    /** Conjunctive type */
-    public const CONJUNCTIVE_AND = 6;
-    /** Conjunctive type */
-    public const CONJUNCTIVE_OR = 7;
-    /** Conjunctive type */
-    public const CONJUNCTIVE_NOT_AND = 8;
-    /** Conjunctive type */
-    public const CONJUNCTIVE_NOT_OR = 9;
-    /** Conjunctive type */
-    public const CONJUNCTIVE_NONE = 10;
-    /** Conjunctive type */
-    public const CONJUNCTIVE_END = 11;
+    public const CONJUNCTIVE_NOT_OR = 4;
 
     /**
      * Constructor. Clear all properties
@@ -117,14 +105,8 @@ class Clause
         $this->column = $column;
         $this->operator = ($operator >= 1 && $operator <= 14) ? $operator : self::OPERATOR_DEFAULT;
         $this->value = $value;
-        $this->conjunctive = ($conjunctive >= 6 && $conjunctive <= 9) ? $conjunctive : self::CONJUNCTIVE_NONE;
+        $this->conjunctive = ($conjunctive >= 0 && $conjunctive <= 4) ? $conjunctive : self::CONJUNCTIVE_NONE;
         $this->level = $level;
-    }
-
-    /** Edit nested conjunctive type */
-    public function editNestedConjunctive($nestedConjunctive)
-    {
-        $this->nestedConjunctive = $nestedConjunctive;
     }
 
     /** Get clause column */
@@ -152,8 +134,11 @@ class Clause
     }
 
     /** Get nested conjunctive type */
-    public function level(): int
+    public function level(int $input = -1): int
     {
+        if ($input > -1) {
+            $this->level = $input;
+        }
         return $this->level;
     }
 
