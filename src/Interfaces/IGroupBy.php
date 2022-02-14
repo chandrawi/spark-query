@@ -2,6 +2,8 @@
 
 namespace SparkLib\SparkQuery\Interfaces;
 
+use SparkLib\SparkQuery\Structure\Column;
+
 interface IGroupBy
 {
 
@@ -19,8 +21,8 @@ interface IGroupBy
 
     /**
      * Add Column group object to GroupBy property of builder object
-     * @param mixed $group
+     * @param Column $group
      */
-    public function addGroup($group);
+    public function addGroup(Column $group);
 
 }

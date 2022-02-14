@@ -14,13 +14,11 @@ class QueryTranslator
 
     /**
      * Query object to store translated query
-     * @var $query
      */
     private $query;
 
     /**
      * Default query translator option
-     * @var $translator
      */
     private $translator;
 

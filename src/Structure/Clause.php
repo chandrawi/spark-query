@@ -2,8 +2,8 @@
 
 namespace SparkLib\SparkQuery\Structure;
 
-use Exception;
 use SparkLib\SparkQuery\Structure\Column;
+use SparkLib\SparkQuery\Structure\Expression;
 
 class Clause
 {
@@ -147,7 +147,7 @@ class Clause
      */
     public static function create(int $clauseType, $column, $operator, $value, int $conjunctive): Clause
     {
-        if ($column instanceof Exception) {
+        if ($column instanceof Expression) {
             $columnObject = $column;
         } else {
             $columnObject = Column::create($column);

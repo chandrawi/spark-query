@@ -18,12 +18,12 @@ interface IBuilder
     public function getTable(): Table;
 
     /**
-     * Get array of tables
+     * Get array of columns
      */
     public function getColumns(): array;
 
     /**
-     * Get array of values
+     * Get array of value pairs
      */
     public function getValues(): array;
 

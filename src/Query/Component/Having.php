@@ -4,6 +4,7 @@ namespace SparkLib\SparkQuery\Query\Component;
 
 use SparkLib\SparkQuery\Structure\Clause;
 use SparkLib\SparkQuery\Structure\Expression;
+use SparkLib\SparkQuery\Interfaces\IHaving;
 
 trait Having
 {
@@ -45,10 +46,12 @@ trait Having
 
     public function endHaving()
     {
-        $lastClause = $this->builder->lastHaving();
-        if ($lastClause instanceof Clause) {
-            $lastLevel = $lastClause->level();
-            $lastClause->level($lastLevel+1);
+        if ($this->builder instanceof IHaving) {
+            $lastClause = $this->builder->lastHaving();
+            if ($lastClause !== null) {
+                $lastLevel = $lastClause->level();
+                $lastClause->level($lastLevel+1);
+            }
         }
         return $this;
     }
@@ -56,10 +59,14 @@ trait Having
     /**
      * Add Clause object to having property of Builder object
      */
-    public function setHaving($column, $operator, $values, int $conjunctive)
+    private function setHaving($column, $operator, $values, int $conjunctive)
     {
         $clauseObject = Clause::create(Clause::HAVING, $column, $operator, $values, $conjunctive);
-        $this->builder->addHaving($clauseObject);
+        if ($this->builder instanceof IHaving) {
+            $this->builder->addHaving($clauseObject);
+        } else {
+            throw new \Exception('Builder object does not support HAVING query');
+        }
         return $this;
     }
 

@@ -23,8 +23,8 @@ class Limit
      */
     public function __construct(int $limit, int $offset)
     {
-        $this->limit = ($limit >= 0) ? $limit : self::NOT_SET ;
-        $this->offset = ($offset >= 0) ? $offset : self::NOT_SET ;
+        $this->limit = $limit;
+        $this->offset =  $offset;
     }
 
     /** Get limit */
@@ -47,7 +47,7 @@ class Limit
         $validLimit = Limit::NOT_SET;
         $validOffset = Limit::NOT_SET;
         if (is_int($limit)) {
-            if ($limit > 0) $validLimit = $offset;
+            if ($limit > 0) $validLimit = $limit;
         }
         if (is_int($offset)) {
             if ($offset > 0) $validOffset = $offset;

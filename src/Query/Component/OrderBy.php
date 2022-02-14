@@ -3,6 +3,7 @@
 namespace SparkLib\SparkQuery\Query\Component;
 
 use SparkLib\SparkQuery\Structure\Order;
+use SparkLib\SparkQuery\Interfaces\IOrderBy;
 
 trait OrderBy
 {
@@ -21,7 +22,11 @@ trait OrderBy
             $orderObjects[] = Order::create($columns, $orderType);
         }
         foreach ($orderObjects as $order) {
-            $this->builder->addOrder($order);
+            if ($this->builder instanceof IOrderBy) {
+                $this->builder->addOrder($order);
+            } else {
+                throw new \Exception('Builder object does not support ORDER BY query');
+            }
         }
         return $this;
     }

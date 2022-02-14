@@ -3,8 +3,8 @@
 namespace SparkLib\SparkQuery\Builder;
 
 use SparkLib\SparkQuery\Builder\BaseBuilder;
-use SparkLib\SparkQuery\Structure\Clause;
-use SparkLib\SparkQuery\Structure\Limit;
+use SparkLib\SparkQuery\Builder\Component\WhereBuilder;
+use SparkLib\SparkQuery\Builder\Component\LimitBuilder;
 use SparkLib\SparkQuery\Interfaces\IWhere;
 use SparkLib\SparkQuery\Interfaces\ILimit;
 
@@ -12,76 +12,8 @@ class DeleteBuilder extends BaseBuilder implements IWhere, ILimit
 {
 
     /**
-     * Array of Clause structure object created by Where manipulation class
+     * Register builder methods and properties from traits
      */
-    private $where = [];
-
-    /**
-     * Limit structure object created by Limit manipulating class
-     */
-    private $limit = null;
-
-    /**
-     * Interface Iwhere required method
-     */
-    public function getWhere(): array
-    {
-        return $this->where;
-    }
-
-    /**
-     * Interface Iwhere required method
-     */
-    public function lastWhere()
-    {
-        $len = count($this->where);
-        if ($len > 0) {
-            return $this->where[$len-1];
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Interface Iwhere required method
-     */
-    public function countWhere(): int
-    {
-        return count($this->where);
-    }
-
-    /**
-     * Interface Iwhere required method
-     */
-    public function addWhere(Clause $where)
-    {
-        $this->where[] = $where;
-    }
-
-    /**
-     * Interface ILimit required method
-     */
-    public function getLimit()
-    {
-        return $this->limit;
-    }
-
-    /**
-     * Interface ILimit required method
-     */
-    public function hasLimit(): bool
-    {
-        return ($this->limit instanceof Limit);
-    }
-
-    /**
-     * Interface ILimit required method
-     */
-    public function setLimit(Limit $limit)
-    {
-        if (empty($this->limit)) {
-            $this->limit = $limit;
-        }
-    }
+    use WhereBuilder, LimitBuilder;
 
 }

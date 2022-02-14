@@ -8,15 +8,17 @@ use SparkLib\SparkQuery\Builder\SelectBuilder;
 use SparkLib\SparkQuery\Builder\InsertBuilder;
 use SparkLib\SparkQuery\Builder\UpdateBuilder;
 use SparkLib\SparkQuery\Builder\DeleteBuilder;
+use SparkLib\SparkQuery\Interfaces\ITranslator;
 
-class GenericTranslator extends BaseTranslator
+class GenericTranslator extends BaseTranslator implements ITranslator
 {
 
     /** ITranslator required method */
     public function __construct(QueryObject $query)
     {
         $query->setMarkQuote('?', ':', '"');
-        $this->QUOTE = "";
+        $this->QUOTE_STRUCT = "";
+        $this->QUOTE_STRING = "";
         $this->EQUAL = "=";
         $this->OPEN_BRACKET = "(";
         $this->CLOSE_BRACKET = ")";

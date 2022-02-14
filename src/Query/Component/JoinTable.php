@@ -3,6 +3,7 @@
 namespace SparkLib\SparkQuery\Query\Component;
 
 use SparkLib\SparkQuery\Structure\Join;
+use SparkLib\SparkQuery\Interfaces\IJoin;
 
 trait JoinTable
 {
@@ -13,7 +14,11 @@ trait JoinTable
     private function setJoinTable($joinTable, int $joinType)
     {
         $joinObject = Join::create($joinTable, $joinType);
-        $this->builder->addJoin($joinObject);
+        if ($this->builder instanceof IJoin) {
+            $this->builder->addJoin($joinObject);
+        } else {
+            throw new \Exception('Builder object does not support JOIN query');
+        }
         return $this;
     }
 
@@ -46,9 +51,11 @@ trait JoinTable
      */
     public function on($column1, $column2)
     {
-        $lastJoin = $this->builder->lastJoin();
-        if ($lastJoin instanceof Join) {
-            $lastJoin->addColumn($column1, $column2);
+        if ($this->builder instanceof IJoin) {
+            $lastJoin = $this->builder->lastJoin();
+            if ($lastJoin !== null) {
+                $lastJoin->addColumn($column1, $column2);
+            }
         }
         return $this;
     }
@@ -61,10 +68,12 @@ trait JoinTable
         if (!is_array($columns)) {
             $columns = [$columns];
         }
-        foreach ($columns as $column) {
+        if ($this->builder instanceof IJoin) {
             $lastJoin = $this->builder->lastJoin();
-            if ($lastJoin instanceof Join) {
-                $lastJoin->addColumn($column);
+            if ($lastJoin !== null) {
+                foreach ($columns as $column) {
+                    $lastJoin->addColumn($column);
+                }
             }
         }
         return $this;

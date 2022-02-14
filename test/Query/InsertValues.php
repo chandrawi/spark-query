@@ -13,6 +13,7 @@ $sparkQuery = new QueryBuilder(QueryTranslator::TRANSLATOR_MYSQL, QueryTranslato
 $builder = $sparkQuery
     ->insert('table')
     ->values(['col1' => 'val1', 'col2' => 'val2', 'col3' => 'val3'])
+    ->limit(1)
 ;
 
 echo var_export($builder->query());

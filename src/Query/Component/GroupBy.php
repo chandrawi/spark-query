@@ -3,6 +3,7 @@
 namespace SparkLib\SparkQuery\Query\Component;
 
 use SparkLib\SparkQuery\Structure\Column;
+use SparkLib\SparkQuery\Interfaces\IGroupBy;
 
 trait GroupBy
 {
@@ -21,7 +22,11 @@ trait GroupBy
             $columnObjects[] = Column::create($columns);
         }
         foreach ($columnObjects as $column) {
-            $this->builder->addGroup($column);
+            if ($this->builder instanceof IGroupBy) {
+                $this->builder->addGroup($column);
+            } else {
+                throw new \Exception('Builder object does not support GROUP BY query');
+            }
         }
         return $this;
     }

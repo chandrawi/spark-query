@@ -3,6 +3,8 @@
 namespace SparkLib\SparkQuery\Query\Component;
 
 use SparkLib\SparkQuery\Structure\Clause;
+use SparkLib\SparkQuery\Interfaces\Iwhere;
+use SparkLib\SparkQuery\Interfaces\IHaving;
 
 trait Clauses
 {
@@ -10,17 +12,21 @@ trait Clauses
     /**
      * Add Clause object to where or having property of Builder object
      */
-    protected function clauses($column, int $operator, $values, int $conjunctive)
+    private function clauses($column, int $operator, $values, int $conjunctive)
     {
         $clauseType = Clause::$clauseType;
         if ($clauseType === Clause::NONE) {
             $clauseType = Clause::WHERE;
         }
         $clauseObject = Clause::create($clauseType, $column, $operator, $values, $conjunctive);
-        if (Clause::$clauseType == Clause::HAVING) {
-            $this->builder->addHaving($clauseObject);
+        if ($this->builder instanceof Iwhere or $this->buiilder instanceof IHaving) {
+            if (Clause::$clauseType == Clause::HAVING) {
+                $this->builder->addHaving($clauseObject);
+            } else {
+                $this->builder->addWhere($clauseObject);
+            }
         } else {
-            $this->builder->addWhere($clauseObject);
+            throw new \Exception('Builder object does not support WHERE or HAVING query');
         }
         return $this;
     }

@@ -17,7 +17,10 @@ class BaseTranslator
 {
 
     /** Quote character for enclosing table and column */
-    protected $QUOTE = "`";
+    protected $QUOTE_STRUCT = "`";
+
+    /** Quote character for enclosing strings */
+    protected $QUOTE_STRING = "'";
 
     /** Equal sign character */
     protected $EQUAL = "=";
@@ -52,9 +55,6 @@ class BaseTranslator
             case BaseBuilder::DELETE:
                 $query->add('DELETE');
                 break;
-            case BaseBuilder::SELECT:
-                $query->add('SELECT ');
-                break;
             case BaseBuilder::SELECT_DISTINCT:
                 $query->add('SELECT DISTINCT ');
                 break;
@@ -70,11 +70,11 @@ class BaseTranslator
             $name = $table->name();
             $alias = $table->alias();
 
-            $query->add(' FROM '. $this->QUOTE);
-            $query->add($table->name());
-            $query->add($this->QUOTE);
+            $query->add(' FROM '. $this->QUOTE_STRUCT);
+            $query->add($name);
+            $query->add($this->QUOTE_STRUCT);
             if ($alias) {
-                $query->add(' AS '. $this->QUOTE. $alias. $this->QUOTE);
+                $query->add(' AS '. $this->QUOTE_STRUCT. $alias. $this->QUOTE_STRUCT);
             }
         }
     }
@@ -87,9 +87,9 @@ class BaseTranslator
         if ($table instanceof Table) {
             $name = $table->name();
 
-            $query->add('INTO '. $this->QUOTE);
-            $query->add($table->name());
-            $query->add($this->QUOTE);
+            $query->add('INTO '. $this->QUOTE_STRUCT);
+            $query->add($name);
+            $query->add($this->QUOTE_STRUCT);
         }
     }
 
@@ -101,9 +101,9 @@ class BaseTranslator
         if ($table instanceof Table) {
             $name = $table->name();
 
-            $query->add($this->QUOTE);
-            $query->add($table->name());
-            $query->add($this->QUOTE);
+            $query->add($this->QUOTE_STRUCT);
+            $query->add($name);
+            $query->add($this->QUOTE_STRUCT);
         }
     }
 
@@ -126,25 +126,23 @@ class BaseTranslator
                 if ($function) {
                     $query->add($function. $this->OPEN_BRACKET);
                 }
+                $query->add($this->QUOTE_STRUCT);
                 if ($table && $multiTableFlag) {
-                    $query->add($this->QUOTE);
                     $query->add($table);
-                    $query->add($this->QUOTE. $this->DOT);
+                    $query->add($this->QUOTE_STRUCT. $this->DOT .$this->QUOTE_STRUCT);
                 }
-                $query->add($this->QUOTE);
                 $query->add($name);
-                $query->add($this->QUOTE);
+                $query->add($this->QUOTE_STRUCT);
                 if ($function) {
                     $query->add($this->CLOSE_BRACKET);
                 }
                 if ($alias) {
-                    $query->add(' AS '. $this->QUOTE. $alias. $this->QUOTE);
+                    $query->add(' AS '. $this->QUOTE_STRUCT. $alias. $this->QUOTE_STRUCT);
                 }
-                (--$count < 1) ?: $query->add($this->COMMA);
-            } else {
+            } elseif ($column instanceof Expression) {
                 $this->expression($query, $column);
-                (--$count < 1) ?: $query->add($this->COMMA);
             }
+            if (--$count > 0) $query->add($this->COMMA);
         }
     }
 
@@ -166,10 +164,10 @@ class BaseTranslator
 
             $query->add(' '. $this->OPEN_BRACKET);
             foreach ($columns as $column) {
-                $query->add($this->QUOTE);
+                $query->add($this->QUOTE_STRUCT);
                 $query->add($column);
-                $query->add($this->QUOTE);
-                (--$count < 1) ?: $query->add($this->COMMA);
+                $query->add($this->QUOTE_STRUCT);
+                if (--$count > 0) $query->add($this->COMMA);
             }
             $query->add($this->CLOSE_BRACKET);
         }
@@ -178,36 +176,31 @@ class BaseTranslator
     /**
      * Create "FUNCTION(`table`.`column`)" or "FUNCTION(`alias`)" expression
      */
-    protected function column(QueryObject $query, $column, bool $tableFlag = false)
+    protected function column(QueryObject $query, Column $column, bool $multiTableFlag = false)
     {
-        if ($column instanceof Column) {
-            $table = $column->table();
-            $name = $column->name();
-            $alias = $column->alias();
-            $function = $column->function();
+        $table = $column->table();
+        $name = $column->name();
+        $alias = $column->alias();
+        $function = $column->function();
 
-            if ($function) {
-                $query->add($function. $this->OPEN_BRACKET);
-            }
-            if ($alias) {
-                $query->add($this->QUOTE);
-                $query->add($column->alias());
-                $query->add($this->QUOTE);
-            } else {
-                $query->add($this->QUOTE);
-                if ($table && $tableFlag) {
-                    $query->add($table);
-                    $query->add($this->QUOTE. $this->DOT. $this->QUOTE);
-                }
-                $query->add($name);
-                $query->add($this->QUOTE);
-            }
-            if ($function) {
-                $query->add($this->CLOSE_BRACKET);
-            }
-            return true;
+        if ($function) {
+            $query->add($function. $this->OPEN_BRACKET);
+        }
+        if ($alias) {
+            $query->add($this->QUOTE_STRUCT);
+            $query->add($column->alias());
+            $query->add($this->QUOTE_STRUCT);
         } else {
-            return false;
+            $query->add($this->QUOTE_STRUCT);
+            if ($table && $multiTableFlag) {
+                $query->add($table);
+                $query->add($this->QUOTE_STRUCT. $this->DOT. $this->QUOTE_STRUCT);
+            }
+            $query->add($name);
+            $query->add($this->QUOTE_STRUCT);
+        }
+        if ($function) {
+            $query->add($this->CLOSE_BRACKET);
         }
     }
 
@@ -231,11 +224,11 @@ class BaseTranslator
                 $query->add($this->OPEN_BRACKET);
                 foreach ($vals as $val) {
                     $query->add($val, true);
-                    (--$countVals < 1) ?: $query->add($this->COMMA);
+                    if (--$countVals > 0) $query->add($this->COMMA);
                 }
                 $query->add($this->CLOSE_BRACKET);
             }
-            (--$count < 1) ?: $query->add($this->COMMA);
+            if (--$count > 0) $query->add($this->COMMA);
         }
     }
 
@@ -254,39 +247,38 @@ class BaseTranslator
                 $countVals = count($vals);
     
                 foreach ($vals as $i => $val) {
-                    $query->add($this->QUOTE);
+                    $query->add($this->QUOTE_STRUCT);
                     if ($multiTableFlag) {
-                        $query->add($table. $this->QUOTE. $this->DOT. $this->QUOTE);
+                        $query->add($table);
+                        $query->add($this->QUOTE_STRUCT. $this->DOT. $this->QUOTE_STRUCT);
                     }
                     $query->add($columns[$i]);
-                    $query->add($this->QUOTE. $this->EQUAL);
+                    $query->add($this->QUOTE_STRUCT. $this->EQUAL);
                     $query->add($val, true);
-                    (--$countVals < 1) ?: $query->add($this->COMMA);
+                    if (--$countVals > 0) $query->add($this->COMMA);
                 }
             }
-            (--$count < 1) ?: $query->add($this->COMMA);
+            if (--$count > 0) $query->add($this->COMMA);
         }
     }
 
     /**
      * Create user defined expression with param binding and alias
      */
-    protected function expression(QueryObject $query, $expression)
+    protected function expression(QueryObject $query, Expression $expression)
     {
-        if ($expression instanceof Expression) {
-            $params = $expression->params();
-            $exps = $expression->expression();
-            $alias = $expression->alias();
+        $params = $expression->params();
+        $exps = $expression->expression();
+        $alias = $expression->alias();
 
-            foreach ($exps as $i => $exp) {
-                $query->add($exp);
-                empty($params[$i]) ?: $query->add($params[$i], true);
-            }
-            if ($alias) {
-                $query->add(' AS '. $this->QUOTE);
-                $query->add($alias);
-                $query->add($this->QUOTE);
-            }
+        foreach ($exps as $i => $exp) {
+            $query->add($exp);
+            if (isset($params[$i])) $query->add($params[$i], true);
+        }
+        if ($alias) {
+            $query->add(' AS '. $this->QUOTE_STRUCT);
+            $query->add($alias);
+            $query->add($this->QUOTE_STRUCT);
         }
     }
 
@@ -297,48 +289,57 @@ class BaseTranslator
     {
         foreach ($joins as $join) {
             if ($join instanceof Join) {
-                switch ($join->joinType()) {
-                    case Join::INNER_JOIN:
-                        $query->add(' INNER JOIN '. $this->QUOTE);
-                        break;
-                    case Join::LEFT_JOIN:
-                        $query->add(' LEFT JOIN '. $this->QUOTE);
-                        break;
-                    case Join::RIGHT_JOIN:
-                        $query->add(' RIGHT JOIN '. $this->QUOTE);
-                        break;
-                    case Join::OUTER_JOIN:
-                        $query->add(' OUTER JOIN '. $this->QUOTE);
-                }
+                $joinType = $this->joinType($join->joinType());
+                $query->add($joinType);
+                $this->joinTable($query, $join->joinTable(), $join->joinAlias());
+                $this->joinColumns($query, $join->baseColumns(), $join->joinColumns(), $join->usingColumns());
             }
-            $this->joinTable($query, $join->joinTable(), $join->joinAlias());
-            $this->joinColumns($query, $join->baseColumns(), $join->joinColumns(), $join->usingColumns());
+        }
+    }
+
+    /**
+     * Translate join type for join query
+     */
+    protected function joinType(int $joinType): string
+    {
+        switch ($joinType) {
+            case Join::INNER_JOIN:
+                return ' INNER JOIN ';
+            case Join::LEFT_JOIN:
+                return ' LEFT JOIN ';
+            case Join::RIGHT_JOIN:
+                return ' RIGHT JOIN ';
+            case Join::OUTER_JOIN:
+                return ' OUTER JOIN ';
+            default:
+                return '';
         }
     }
 
     /**
      * Create "`table` AS `alias`" expression for JOIN query
      */
-    protected function joinTable(QueryObject $query, $joinTable, $joinAlias)
+    protected function joinTable(QueryObject $query, string $joinTable, string $joinAlias)
     {
+        $query->add($this->QUOTE_STRUCT);
         $query->add($joinTable);
         if ($joinAlias) {
-            $query->add($this->QUOTE. ' AS '. $this->QUOTE. $joinAlias);
+            $query->add($this->QUOTE_STRUCT. ' AS '. $this->QUOTE_STRUCT. $joinAlias);
         }
-        $query->add($this->QUOTE);
+        $query->add($this->QUOTE_STRUCT);
     }
 
     /**
      * Create "USING(`column`)" or "ON `basetable`.`column`=`jointable`.`column`" expression for JOIN query
      */
-    protected function joinColumns(QueryObject $query, $baseColumns, $joinColumns, $usingColumns)
+    protected function joinColumns(QueryObject $query, array $baseColumns, array $joinColumns, array $usingColumns)
     {    
         $count = count($usingColumns);
         if ($count) {
             $query->add(' USING '. $this->OPEN_BRACKET);
             foreach ($usingColumns as $column) {
                 $this->column($query, $column, false);
-                (--$count < 1) ?: $query->add($this->COMMA);
+                if (--$count > 1) $query->add($this->COMMA);
             }
             $query->add($this->CLOSE_BRACKET);
         } else {
@@ -430,7 +431,7 @@ class BaseTranslator
     /**
      * Create "WHERE" expression and generate list of clause expression
      */
-    protected function where(QueryObject $query, array $whereClauses, $count, $multiTableFlag = false)
+    protected function where(QueryObject $query, array $whereClauses, $count, bool $multiTableFlag = false)
     {
         if ($count) {
             $query->add(' WHERE ');
@@ -451,7 +452,7 @@ class BaseTranslator
     /**
      * Create "HAVING" expression and generate list of clause expression
      */
-    protected function having(QueryObject $query, array $havingClauses, $count, $multiTableFlag = false)
+    protected function having(QueryObject $query, array $havingClauses, $count, bool $multiTableFlag = false)
     {
         if ($count) {
             $query->add(' HAVING ');
@@ -472,30 +473,29 @@ class BaseTranslator
     /**
      * Create clause expression which contain column, operator, and value
      */
-    protected function clause(QueryObject $query, $clause, $multiTableFlag = false)
+    protected function clause(QueryObject $query, $clause, bool $multiTableFlag = false)
     {
         if ($clause instanceof Clause) {
-            $this->column($query, $clause->column(), $multiTableFlag) ?: $this->expression($query, $clause->column());
+            $column = $clause->column();
             $operator = $clause->operator();
             $values = $clause->value();
 
+            if ($column instanceof Column) {
+                $this->column($query, $column, $multiTableFlag);
+            } elseif ($column instanceof Expression) {
+                $this->expression($query, $column);
+            }
             switch ($operator) {
                 case Clause::OPERATOR_BETWEEN:
                 case Clause::OPERATOR_NOT_BETWEEN:
-                    $this->between($query, $operator, $values);
+                    $this->clauseBetween($query, $operator, $values);
                     break;
                 case Clause::OPERATOR_IN:
                 case Clause::OPERATOR_NOT_IN:
-                    $this->in($query, $operator, $values);
-                    break;
-                case Clause::OPERATOR_NULL:
-                    $query->add(' IS NULL');
-                    break;
-                case Clause::OPERATOR_NOT_NULL:
-                    $query->add(' IS NOT NULL');
+                    $this->clauseIn($query, $operator, $values);
                     break;
                 default:
-                    $this->comparison($query, $operator, $values);
+                    $this->clauseComparison($query, $operator, $values);
                     break;
             }
         }
@@ -504,17 +504,19 @@ class BaseTranslator
     /**
      * Create comparison expression in clause expression
      */
-    protected function comparison(QueryObject $query, int $operator, $values)
+    protected function clauseComparison(QueryObject $query, int $operator, $values)
     {
         $operatorString = $this->operator($operator);
         $query->add($operatorString);
-        $query->add($values, true);
+        if ($operator !== Clause::OPERATOR_NULL && $operator !== Clause::OPERATOR_NOT_NULL) {
+            $query->add($values, true);
+        }
     }
 
     /**
      * Create between expression in clause expression
      */
-    protected function between(QueryObject $query, int $operator, array $values)
+    protected function clauseBetween(QueryObject $query, int $operator, array $values)
     {
         $operatorString = $this->operator($operator);
         $query->add($operatorString);
@@ -526,7 +528,7 @@ class BaseTranslator
     /**
      * Create in expression in clause expression
      */
-    protected function in(QueryObject $query, int $operator, array $values)
+    protected function clauseIn(QueryObject $query, int $operator, array $values)
     {
         $operatorString = $this->operator($operator);
         $query->add($operatorString. $this->OPEN_BRACKET);
@@ -541,13 +543,13 @@ class BaseTranslator
     /**
      * Create "GROUP BY " expression and generate list of column expression
      */
-    protected function groupBy(QueryObject $query, array $groups, int $count, $multiTableFlag = false)
+    protected function groupBy(QueryObject $query, array $groups, int $count, bool $multiTableFlag = false)
     {
         if ($count) {
             $query->add(' GROUP BY ');
             foreach ($groups as $group) {
                 $this->column($query, $group, $multiTableFlag);
-                (--$count < 1) ?: $query->add($this->COMMA);
+                if (--$count > 1) $query->add($this->COMMA);
             }
         }
     }
@@ -555,14 +557,14 @@ class BaseTranslator
     /**
      * Create "ORDER BY `column` ASC|DESC" expression
      */
-    protected function orderBy(QueryObject $query, array $orders, int $count, $multiTableFlag = false)
+    protected function orderBy(QueryObject $query, array $orders, int $count, bool $multiTableFlag = false)
     {
         if ($count) {
             $query->add(' ORDER BY ');
             foreach ($orders as $order) {
                 $column = $order->column();
                 $this->column($query, $column, $multiTableFlag);
-    
+
                 switch ($order->orderType()) {
                     case Order::ORDER_ASC:
                         $query->add(' ASC');

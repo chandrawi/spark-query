@@ -11,8 +11,10 @@ use SparkLib\SparkQuery\QueryTranslator;
 $sparkQuery = new QueryBuilder(QueryTranslator::TRANSLATOR_MYSQL, QueryTranslator::PARAM_ASSOC);
 
 $builder = $sparkQuery
-    ->select('table')
-    ->columns(['col1', 'alias2' => 'col2', 'max' => 'MAX(col3)'])
+    ->select(['alias' => 'table'])
+    ->column('col1')
+    ->columns(['alias2' => 'col2', 'max' => 'MAX(col3)'])
+    ->columns(['col4'])
 ;
 
 echo var_export($builder->query());

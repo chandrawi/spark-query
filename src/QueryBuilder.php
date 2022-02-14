@@ -2,15 +2,10 @@
 
 namespace SparkLib\SparkQuery;
 
-use SparkLib\SparkQuery\Query\BaseQuery;
 use SparkLib\SparkQuery\Query\Select;
 use SparkLib\SparkQuery\Query\Insert;
 use SparkLib\SparkQuery\Query\Update;
 use SparkLib\SparkQuery\Query\Delete;
-use SparkLib\SparkQuery\Builder\SelectBuilder;
-use SparkLib\SparkQuery\Builder\InsertBuilder;
-use SparkLib\SparkQuery\Builder\UpdateBuilder;
-use SparkLib\SparkQuery\Builder\DeleteBuilder;
 
 class QueryBuilder
 {

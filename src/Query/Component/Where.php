@@ -4,6 +4,7 @@ namespace SparkLib\SparkQuery\Query\Component;
 
 use SparkLib\SparkQuery\Structure\Clause;
 use SparkLib\SparkQuery\Structure\Expression;
+use SparkLib\SparkQuery\Interfaces\Iwhere;
 
 trait Where
 {
@@ -45,10 +46,12 @@ trait Where
 
     public function endWhere()
     {
-        $lastClause = $this->builder->lastWhere();
-        if ($lastClause instanceof Clause) {
-            $lastLevel = $lastClause->level();
-            $lastClause->level($lastLevel+1);
+        if ($this->builder instanceof Iwhere) {
+            $lastClause = $this->builder->lastWhere();
+            if ($lastClause !== null) {
+                $lastLevel = $lastClause->level();
+                $lastClause->level($lastLevel+1);
+            }
         }
         return $this;
     }
@@ -56,10 +59,14 @@ trait Where
     /**
      * Add Clause object to where property of Builder object
      */
-    public function setWhere($column, $operator, $values, int $conjunctive)
+    private function setWhere($column, $operator, $values, int $conjunctive)
     {
         $clauseObject = Clause::create(Clause::WHERE, $column, $operator, $values, $conjunctive);
-        $this->builder->addWhere($clauseObject);
+        if ($this->builder instanceof Iwhere) {
+            $this->builder->addWhere($clauseObject);
+        } else {
+            throw new \Exception('Builder object does not support WHERE query');
+        }
         return $this;
     }
 
