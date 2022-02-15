@@ -5,6 +5,9 @@ namespace SparkLib\SparkQuery\Structure;
 use SparkLib\SparkQuery\Structure\Table;
 use SparkLib\SparkQuery\Structure\Column;
 
+/**
+ * Object for storing join table query definition. Used in INNER JOIN, LEFT JOIN, RIGHT JOIN, or OUTER JOIN query
+ */
 class Join
 {
 
@@ -79,7 +82,7 @@ class Join
         return $this->joinType;
     }
 
-    /** Get base table */
+    /** Get base table name */
     public function baseTable(): string
     {
         return $this->baseTable;
@@ -97,19 +100,19 @@ class Join
         return $this->joinAlias;
     }
 
-    /** Get base column */
+    /** Get base column objects list */
     public function baseColumns(): array
     {
         return $this->baseColumns;
     }
 
-    /** Get join column */
+    /** Get join column objects list */
     public function joinColumns(): array
     {
         return $this->joinColumns;
     }
 
-    /** Get using column */
+    /** Get using column objects list */
     public function usingColumns(): array
     {
         return $this->usingColumns;
@@ -135,7 +138,7 @@ class Join
     }
 
     /**
-     * Add a JOIN table to Table list
+     * Get a valid join type option from input join type
      */
     private static function getType($joinType): int
     {
@@ -167,7 +170,7 @@ class Join
     }
 
     /**
-     * Edit join table object base and join columns Table object property
+     * Add columns object property to a join table object
      */
     public function addColumn($column1, $column2 = null)
     {

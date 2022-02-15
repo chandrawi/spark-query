@@ -5,6 +5,9 @@ namespace SparkLib\SparkQuery\Query\Component;
 use SparkLib\SparkQuery\Structure\Column;
 use SparkLib\SparkQuery\Interfaces\IGroupBy;
 
+/**
+ * GROUP BY manipulation component.
+ */
 trait GroupBy
 {
 

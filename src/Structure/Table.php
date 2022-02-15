@@ -2,6 +2,9 @@
 
 namespace SparkLib\SparkQuery\Structure;
 
+/**
+ * Object for storing a table definition.
+ */
 class Table
 {
 

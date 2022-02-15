@@ -13,6 +13,11 @@ use SparkLib\SparkQuery\Structure\Clause;
 use SparkLib\SparkQuery\Structure\Order;
 use SparkLib\SparkQuery\Structure\Limit;
 
+/**
+ * Translator base class.
+ * Contain methods for translating builder object to query object.
+ * Methods and class properties can be overload by a derived class for creating spesific database translator.
+ */
 class BaseTranslator
 {
 
@@ -40,6 +45,9 @@ class BaseTranslator
     /** End of query character */
     protected $END_QUERY = ";";
 
+    /**
+     * Create first query keyword from builder type
+     */
     protected function firstKeyword(QueryObject $query, $builderType)
     {
         switch ($builderType) {
@@ -94,7 +102,7 @@ class BaseTranslator
     }
 
     /**
-     * Create "`table`" expression
+     * Create "`table` SET" expression
      */
     protected function tableSet(QueryObject $query, $table)
     {

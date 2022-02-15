@@ -4,6 +4,9 @@ namespace SparkLib\SparkQuery\Builder\Component;
 
 use SparkLib\SparkQuery\Structure\Column;
 
+/**
+ * Builder component for GROUP BY query
+ */
 trait GroupByBuilder
 {
 
@@ -13,7 +16,7 @@ trait GroupByBuilder
     protected $groupBy = [];
 
     /**
-     * Interface IGroupBy required method
+     * Get list of column group
      */
     public function getGroup(): array
     {
@@ -21,7 +24,7 @@ trait GroupByBuilder
     }
 
     /**
-     * Interface IGroupBy required method
+     * Count list of column group
      */
     public function countGroup(): int
     {
@@ -29,7 +32,7 @@ trait GroupByBuilder
     }
 
     /**
-     * Interface IGroupBy required method
+     * Add a column to group list
      */
     public function addGroup(Column $group)
     {

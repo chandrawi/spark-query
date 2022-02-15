@@ -11,6 +11,9 @@ use SparkLib\SparkQuery\Builder\UpdateBuilder;
 use SparkLib\SparkQuery\Structure\Table;
 use SparkLib\SparkQuery\Structure\Value;
 
+/**
+ * UPDATE query manipulation class.
+ */
 class Update extends BaseQuery
 {
 
@@ -32,7 +35,7 @@ class Update extends BaseQuery
     }
 
     /**
-     * UPDATE query
+     * UPDATE query table input
      */
     public function update($table)
     {
@@ -46,7 +49,8 @@ class Update extends BaseQuery
     }
 
     /**
-     * Add a value object to list of Column in builder object
+     * Add value and column pair set to builder object.
+     * Takes a dictionary with keys as column or list of two list with first item as column.
      */
     public function set(array $values)
     {

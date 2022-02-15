@@ -2,6 +2,10 @@
 
 namespace SparkLib\SparkQuery;
 
+/**
+ * An object for storing translated query.
+ * Contain list of query string parts and query parameters.
+ */
 class QueryObject
 {
 
@@ -39,7 +43,7 @@ class QueryObject
     }
 
     /**
-     * Get array of query parts
+     * Get query parts list
      */
     public function parts(): array
     {
@@ -94,14 +98,14 @@ class QueryObject
         return $this->bindMarkAssoc;
     }
 
-    /** Get string quote */
+    /** Get string value quote character */
     public function stringQuote(): string
     {
         return $this->stringQuote;
     }
 
     /**
-     * Set sequential and associative binding mark
+     * Set sequential and associative binding mark and quote character
      */
     public function setMarkQuote(string $bindMarkNum, string $bindMarkAssoc, string $stringQuote)
     {

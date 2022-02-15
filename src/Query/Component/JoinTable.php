@@ -5,11 +5,15 @@ namespace SparkLib\SparkQuery\Query\Component;
 use SparkLib\SparkQuery\Structure\Join;
 use SparkLib\SparkQuery\Interfaces\IJoin;
 
+/**
+ * Join table manipulation component.
+ * Used for INNER JOIN, LEFT JOIN, RIGHT JOIN, OUTER JOIN query.
+ */
 trait JoinTable
 {
 
     /**
-     * Create join table object from input table
+     * Add Join object to join property of Builder object
      */
     private function setJoinTable($joinTable, int $joinType)
     {
@@ -22,32 +26,32 @@ trait JoinTable
         return $this;
     }
 
-    /** INNER JOIN query manipulation method */
+    /** INNER JOIN query manipulation method. Takes join table name input */
     public function innerJoin($joinTable)
     {
         return $this->setJoinTable($joinTable, Join::INNER_JOIN);
     }
 
-    /** LEFT JOIN query manipulation method */
+    /** LEFT JOIN query manipulation method. Takes join table name input */
     public function leftJoin($joinTable)
     {
         return $this->setJoinTable($joinTable, Join::LEFT_JOIN);
     }
 
-    /** RIGHT JOIN query manipulation method */
+    /** RIGHT JOIN query manipulation method. Takes join table name input */
     public function rightJoin(string $joinTable)
     {
         return $this->setJoinTable($joinTable, Join::RIGHT_JOIN);
     }
 
-    /** OUTER JOIN query manipulation method */
+    /** OUTER JOIN query manipulation method. Takes join table name input */
     public function outerJoin(string $joinTable)
     {
         return $this->setJoinTable($joinTable, Join::OUTER_JOIN);
     }
 
     /**
-     * Edit a JOIN table from Join list to build ON query
+     * Add join columns and build ON query
      */
     public function on($column1, $column2)
     {
@@ -61,7 +65,7 @@ trait JoinTable
     }
 
     /**
-     * Edit a JOIN table from Join list to build USING query
+     * Add join columns and build USING query
      */
     public function using($columns)
     {

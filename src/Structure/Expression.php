@@ -2,6 +2,9 @@
 
 namespace SparkLib\SparkQuery\Structure;
 
+/**
+ * Object for storing a user custom query expression.
+ */
 class Expression
 {
 
@@ -52,7 +55,7 @@ class Expression
         return $this->alias;
     }
 
-    /** Get parameters array */
+    /** Get expression parameters array */
     public function params(): array
     {
         return $this->params;

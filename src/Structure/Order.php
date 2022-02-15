@@ -4,6 +4,9 @@ namespace SparkLib\SparkQuery\Structure;
 
 use SparkLib\SparkQuery\Structure\Column;
 
+/**
+ * Object for storing order of query result definition. Used in ORDER BY query
+ */
 class Order
 {
 
@@ -46,7 +49,7 @@ class Order
     }
 
     /**
-     * Create list of Order object from column inputs and order type for ORDER BY query
+     * Create Order object from column inputs and order type for ORDER BY query
      */
     public static function create($column, $orderType): Order
     {

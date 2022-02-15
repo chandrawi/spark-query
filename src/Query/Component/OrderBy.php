@@ -5,6 +5,9 @@ namespace SparkLib\SparkQuery\Query\Component;
 use SparkLib\SparkQuery\Structure\Order;
 use SparkLib\SparkQuery\Interfaces\IOrderBy;
 
+/**
+ * ORDER BY manipulation component.
+ */
 trait OrderBy
 {
 
@@ -32,7 +35,7 @@ trait OrderBy
     }
 
     /**
-     * ORDER BY query manipulation using ASC order
+     * ORDER BY query with ASC order
      */
     public function orderByAsc($columns)
     {
@@ -40,7 +43,7 @@ trait OrderBy
     }
 
     /**
-     * ORDER BY query manipulation using DESC order
+     * ORDER BY query with DESC order
      */
     public function orderByDesc($columns)
     {

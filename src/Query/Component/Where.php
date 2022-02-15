@@ -6,9 +6,14 @@ use SparkLib\SparkQuery\Structure\Clause;
 use SparkLib\SparkQuery\Structure\Expression;
 use SparkLib\SparkQuery\Interfaces\Iwhere;
 
+/**
+ * WHERE clause manipulation component.
+ * Used for WHERE query.
+ */
 trait Where
 {
 
+    /** Begin a nested WHERE clause */
     public function beginWhere()
     {
         Clause::$nestedConjunctive = Clause::CONJUNCTIVE_NONE;
@@ -16,6 +21,7 @@ trait Where
         return $this;
     }
 
+    /** Begin a nested WHERE clause with AND conjunctive */
     public function beginAndWhere()
     {
         Clause::$nestedConjunctive = Clause::CONJUNCTIVE_AND;
@@ -23,6 +29,7 @@ trait Where
         return $this;
     }
 
+    /** Begin a nested WHERE clause with OR conjunctive */
     public function beginOrWhere()
     {
         Clause::$nestedConjunctive = Clause::CONJUNCTIVE_OR;
@@ -30,6 +37,7 @@ trait Where
         return $this;
     }
 
+    /** Begin a nested WHERE clause with NOT AND conjunctive */
     public function beginNotAndWhere()
     {
         Clause::$nestedConjunctive = Clause::CONJUNCTIVE_NOT_AND;
@@ -37,6 +45,7 @@ trait Where
         return $this;
     }
 
+    /** Begin a nested WHERE clause with NOT OR conjunctive */
     public function beginNotOrWhere()
     {
         Clause::$nestedConjunctive = Clause::CONJUNCTIVE_NOT_OR;
@@ -44,6 +53,7 @@ trait Where
         return $this;
     }
 
+    /** End a nested WHERE clause */
     public function endWhere()
     {
         if ($this->builder instanceof Iwhere) {
@@ -70,49 +80,58 @@ trait Where
         return $this;
     }
 
+    /** WHERE clause query without conjunctive */
     public function where($column, string $operator, $values = null)
     {
         return $this->setWhere($column, $operator, $values, Clause::CONJUNCTIVE_NONE);
     }
 
+    /** WHERE clause query with AND conjunctive */
     public function andWhere($column, string $operator, $values = null)
     {
         return $this->setWhere($column, $operator, $values, Clause::CONJUNCTIVE_AND);
     }
 
+    /** WHERE clause query with OR conjunctive */
     public function orWhere($column, string $operator, $values = null)
     {
         return $this->setWhere($column, $operator, $values, Clause::CONJUNCTIVE_OR);
     }
 
+    /** WHERE clause query with NOT AND conjunctive */
     public function notAndWhere($column, string $operator, $values = null)
     {
         return $this->setWhere($column, $operator, $values, Clause::CONJUNCTIVE_NOT_AND);
     }
 
+    /** WHERE clause query with NOT OR conjunctive */
     public function notOrWhere($column, string $operator, $values = null)
     {
         return $this->setWhere($column, $operator, $values, Clause::CONJUNCTIVE_NOT_OR);
     }
 
+    /** WHERE expression query with AND conjunctive */
     public function whereExpression(string $expression, string $operator, $values = null, array $params = [])
     {
         $expressionObject = Expression::create($expression, '', $params);
         return $this->setWhere($expressionObject, $operator, $values, Clause::CONJUNCTIVE_AND);
     }
 
+    /** WHERE expression query with OR conjunctive */
     public function orWhereExpression(string $expression, string $operator, $values = null, array $params = [])
     {
         $expressionObject = Expression::create($expression, '', $params);
         return $this->setWhere($expressionObject, $operator, $values, Clause::CONJUNCTIVE_OR);
     }
 
+    /** WHERE expression query with NOT AND conjunctive */
     public function notAndWhereExpression(string $expression, string $operator, $values = null, array $params = [])
     {
         $expressionObject = Expression::create($expression, '', $params);
         return $this->setWhere($expressionObject, $operator, $values, Clause::CONJUNCTIVE_NOT_AND);
     }
 
+    /** WHERE expression query with NOT OR conjunctive */
     public function notOrWhereExpression(string $expression, string $operator, $values = null, array $params = [])
     {
         $expressionObject = Expression::create($expression, '', $params);

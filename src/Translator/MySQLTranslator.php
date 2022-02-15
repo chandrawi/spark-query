@@ -10,6 +10,9 @@ use SparkLib\SparkQuery\Builder\UpdateBuilder;
 use SparkLib\SparkQuery\Builder\DeleteBuilder;
 use SparkLib\SparkQuery\Interfaces\ITranslator;
 
+/**
+ * Translator for MySQL database.
+ */
 class MySQLTranslator extends BaseTranslator implements ITranslator
 {
 
@@ -27,7 +30,7 @@ class MySQLTranslator extends BaseTranslator implements ITranslator
         $this->END_QUERY = ";";
     }
 
-    /** ITranslator required method */
+    /** ITranslator required method. Translate SELECT query from select builder */
     public function translateSelect(QueryObject $query, SelectBuilder $builder)
     {
         $multiTableFlag = boolval($builder->countJoin());
@@ -44,7 +47,7 @@ class MySQLTranslator extends BaseTranslator implements ITranslator
         $query->add($this->END_QUERY);
     }
 
-    /** ITranslator required method */
+    /** ITranslator required method. Translate INSERT query from insert builder */
     public function translateInsert(QueryObject $query, InsertBuilder $builder)
     {
         $this->firstKeyword($query, $builder->builderType());
@@ -55,7 +58,7 @@ class MySQLTranslator extends BaseTranslator implements ITranslator
         $query->add($this->END_QUERY);
     }
 
-    /** ITranslator required method */
+    /** ITranslator required method. Translate UPDATE query from update builder */
     public function translateUpdate(QueryObject $query, UpdateBuilder $builder)
     {
         $multiTableFlag = boolval($builder->countJoin());
@@ -69,7 +72,7 @@ class MySQLTranslator extends BaseTranslator implements ITranslator
         $query->add($this->END_QUERY);
     }
 
-    /** ITranslator required method */
+    /** ITranslator required method. Translate DELETE query from delete builder */
     public function translateDelete(QueryObject $query, DeleteBuilder $builder)
     {
         $this->firstKeyword($query, $builder->builderType());

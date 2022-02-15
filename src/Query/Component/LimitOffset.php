@@ -5,11 +5,14 @@ namespace SparkLib\SparkQuery\Query\Component;
 use SparkLib\SparkQuery\Structure\Limit;
 use SparkLib\SparkQuery\Interfaces\ILimit;
 
+/**
+ * LIMIT or OFFSET manipulation component.
+ */
 trait LimitOffset
 {
 
     /**
-     * LIMIT query manipulation
+     * LIMIT or OFFSET query manipulation
      */
     public function limit($limit, $offset = Limit::NOT_SET)
     {

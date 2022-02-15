@@ -8,6 +8,10 @@ use SparkLib\SparkQuery\Structure\Value;
 use SparkLib\SparkQuery\Structure\Expression;
 use SparkLib\SparkQuery\Interfaces\IBuilder;
 
+/**
+ * Base of builder object.
+ * Basic template for building a query
+ */
 class BaseBuilder implements IBuilder
 {
 
@@ -36,7 +40,7 @@ class BaseBuilder implements IBuilder
     public const INSERT_COPY = 9;
 
     /**
-     * Get or set object type
+     * Get or set builder object type
      */
     public function builderType(int $type = 0): int
     {
@@ -62,7 +66,7 @@ class BaseBuilder implements IBuilder
     protected $values = [];
 
     /**
-     * Set tables array to single table
+     * Set table for a builder
      */
     public function setTable(Table $table)
     {
@@ -72,7 +76,7 @@ class BaseBuilder implements IBuilder
     }
 
     /**
-     * Get array of tables
+     * Get table of a builder
      */
     public function getTable(): Table
     {
@@ -90,7 +94,7 @@ class BaseBuilder implements IBuilder
     }
 
     /**
-     * Get array of columns
+     * Get list of columns
      */
     public function getColumns(): array
     {

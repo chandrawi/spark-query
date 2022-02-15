@@ -4,6 +4,9 @@ namespace SparkLib\SparkQuery\Builder\Component;
 
 use SparkLib\SparkQuery\Structure\Clause;
 
+/**
+ * Builder component for HAVING clause query
+ */
 trait HavingBuilder
 {
 
@@ -13,7 +16,7 @@ trait HavingBuilder
     private $having = [];
 
     /**
-     * Interface Ihaving required method
+     * Get list of having clause
      */
     public function getHaving(): array
     {
@@ -21,7 +24,7 @@ trait HavingBuilder
     }
 
     /**
-     * Interface Ihaving required method
+     * Get last having clause in having list
      */
     public function lastHaving()
     {
@@ -34,7 +37,7 @@ trait HavingBuilder
     }
 
     /**
-     * Interface Ihaving required method
+     * Count list of having clause
      */
     public function countHaving(): int
     {
@@ -42,7 +45,7 @@ trait HavingBuilder
     }
 
     /**
-     * Interface Ihaving required method
+     * Add a having clause to having list
      */
     public function addHaving(Clause $having)
     {

@@ -4,6 +4,9 @@ namespace SparkLib\SparkQuery\Builder\Component;
 
 use SparkLib\SparkQuery\Structure\Join;
 
+/**
+ * Builder component for JOIN query
+ */
 trait JoinBuilder
 {
 
@@ -13,7 +16,7 @@ trait JoinBuilder
     private $join = [];
 
     /**
-     * Interface IJoin required method
+     * Get list of join table
      */
     public function getJoin(): array
     {
@@ -21,7 +24,7 @@ trait JoinBuilder
     }
 
     /**
-     * Interface IJoin required method
+     * Get last join in where list
      */
     public function lastJoin()
     {
@@ -34,7 +37,7 @@ trait JoinBuilder
     }
 
     /**
-     * Interface IJoin required method
+     * Count list of join table
      */
     public function countJoin(): int
     {
@@ -42,7 +45,7 @@ trait JoinBuilder
     }
 
     /**
-     * Interface IJoin required method
+     * Add a join to join list
      */
     public function addJoin(Join $join)
     {

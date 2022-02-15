@@ -4,6 +4,9 @@ namespace SparkLib\SparkQuery\Structure;
 
 use SparkLib\SparkQuery\Structure\Table;
 
+/**
+ * Object for storing a column definition.
+ */
 class Column
 {
 
@@ -38,7 +41,7 @@ class Column
         $this->function = $function;
     }
 
-    /** Get table name or alias of column */
+    /** Get table name or table alias of column */
     public function table()
     {
         return $this->table;
@@ -50,20 +53,20 @@ class Column
         return $this->name;
     }
 
-    /** Get table name of column */
+    /** Get alias name of column */
     public function alias()
     {
         return $this->alias;
     }
 
-    /** Get table name of column */
+    /** Get SQL aggregate function */
     public function function()
     {
         return $this->function;
     }
 
     /**
-     * Create column object from string input or ascossiative array with key as alias
+     * Create column object from string input or associative array with key as alias
      */
     public static function create($column): Column
     {

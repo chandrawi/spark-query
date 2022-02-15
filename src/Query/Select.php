@@ -15,6 +15,9 @@ use SparkLib\SparkQuery\Structure\Table;
 use SparkLib\SparkQuery\Structure\Column;
 use SparkLib\SparkQuery\Structure\Expression;
 
+/**
+ * SELECT query manipulation class.
+ */
 class Select extends BaseQuery
 {
 
@@ -36,7 +39,7 @@ class Select extends BaseQuery
     }
 
     /**
-     * SELECT query
+     * SELECT query table input
      */
     public function select($table)
     {
@@ -50,7 +53,7 @@ class Select extends BaseQuery
     }
 
     /**
-     * SELECT DISTINC query
+     * SELECT DISTINC query table input
      */
     public function selectDistinct($table)
     {
@@ -59,7 +62,8 @@ class Select extends BaseQuery
     }
 
     /**
-     * Add a column object to list of Column in builder object
+     * Add a column object to list of Column in builder object.
+     * Takes a column name string or a dictionary with keys as column alias.
      */
     public function column($column)
     {
@@ -69,7 +73,8 @@ class Select extends BaseQuery
     }
 
     /**
-     * Add multiple column objects to list of Column in builder object
+     * Add multiple column objects to list of Column in builder object.
+     * Takes a list containing column name or a dictionary with keys as column alias.
      */
     public function columns(array $columns)
     {
@@ -81,7 +86,8 @@ class Select extends BaseQuery
     }
 
     /**
-     * Add a expression object to list of Column in builder object
+     * Add an expression object to list of Column in builder object.
+     * Takes expression string, expression alias, and list of parameters.
      */
     public function columnExpression(string $expression, string $alias = '', array $params = [])
     {

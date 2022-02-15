@@ -10,6 +10,9 @@ use SparkLib\SparkQuery\Interfaces\IJoin;
 use SparkLib\SparkQuery\Interfaces\IWhere;
 use SparkLib\SparkQuery\Interfaces\ILimit;
 
+/**
+ * Template for building UPDATE query
+ */
 class UpdateBuilder extends BaseBuilder implements IJoin, IWhere, ILimit
 {
 

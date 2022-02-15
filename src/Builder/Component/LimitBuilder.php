@@ -4,6 +4,9 @@ namespace SparkLib\SparkQuery\Builder\Component;
 
 use SparkLib\SparkQuery\Structure\Limit;
 
+/**
+ * Builder component for LIMIT and OFFSET query
+ */
 trait LimitBuilder
 {
 
@@ -13,7 +16,7 @@ trait LimitBuilder
     private $limit = null;
 
     /**
-     * Interface ILimit required method
+     * Get limit and offset number
      */
     public function getLimit()
     {
@@ -21,7 +24,7 @@ trait LimitBuilder
     }
 
     /**
-     * Interface ILimit required method
+     * Check limit or offset defined
      */
     public function hasLimit(): bool
     {
@@ -29,7 +32,7 @@ trait LimitBuilder
     }
 
     /**
-     * Interface ILimit required method
+     * Set limit and offset number
      */
     public function setLimit(Limit $limit)
     {

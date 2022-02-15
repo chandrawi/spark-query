@@ -16,6 +16,9 @@ use SparkLib\SparkQuery\Interfaces\IHaving;
 use SparkLib\SparkQuery\Interfaces\IOrderBy;
 use SparkLib\SparkQuery\Interfaces\ILimit;
 
+/**
+ * Template for building SELECT query
+ */
 class SelectBuilder extends BaseBuilder implements IJoin, IWhere, IGroupBy, IHaving, IOrderBy, ILimit
 {
 

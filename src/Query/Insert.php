@@ -9,6 +9,9 @@ use SparkLib\SparkQuery\Builder\InsertBuilder;
 use SparkLib\SparkQuery\Structure\Table;
 use SparkLib\SparkQuery\Structure\Value;
 
+/**
+ * INSERT query manipulation class.
+ */
 class Insert extends BaseQuery
 {
 
@@ -30,7 +33,7 @@ class Insert extends BaseQuery
     }
 
     /**
-     * INSERT INTO query
+     * INSERT INTO query query table input
      */
     public function insert($table)
     {
@@ -44,7 +47,7 @@ class Insert extends BaseQuery
     }
 
     /**
-     * INSERT INTO SELECT query
+     * INSERT INTO SELECT query table input
      */
     public function insertCopy($table)
     {
@@ -53,7 +56,8 @@ class Insert extends BaseQuery
     }
 
     /**
-     * Add a value object to list of Column in builder object
+     * Add value and column pair list in builder object.
+     * Takes a dictionary with keys as column or list of two list with first item as column.
      */
     public function values(array $values)
     {
@@ -63,7 +67,8 @@ class Insert extends BaseQuery
     }
 
     /**
-     * Add multiple value objects to list of Column in builder object
+     * Add multiple value and column pair list in builder object.
+     * Takes list of dictionary with keys as column.
      */
     public function multiValues(array $multiValues)
     {

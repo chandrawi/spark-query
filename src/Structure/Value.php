@@ -4,6 +4,9 @@ namespace SparkLib\SparkQuery\Structure;
 
 use SparkLib\SparkQuery\Structure\Table;
 
+/**
+ * Object for storing limit and offset of query operation. Used in LIMIT and OFFSET query
+ */
 class Value
 {
 
@@ -80,7 +83,7 @@ class Value
     }
 
     /**
-     * Parsing horizontal array and return vertical array
+     * Parsing column and value pair from input array
      */
     private static function parsePair(array $pairs): array
     {

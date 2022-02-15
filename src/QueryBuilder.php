@@ -7,6 +7,23 @@ use SparkLib\SparkQuery\Query\Insert;
 use SparkLib\SparkQuery\Query\Update;
 use SparkLib\SparkQuery\Query\Delete;
 
+/**
+ * SQL builder library.
+ * 
+ * Build a query using series of methods. Support build query for various RDBMS. 
+ * Can produces a complete query string with input parameters or with separate parameters.
+ * 
+ * translator option:
+ * - TRANSLATOR_GENERIC
+ * - TRANSLATOR_BEAUTIFY
+ * - TRANSLATOR_MYSQL
+ * - TRANSLATOR_SQLITE
+ * 
+ * binding option:
+ * - PARAM_NONE
+ * - PARAM_NUM
+ * - PARAM_ASSOC
+ */
 class QueryBuilder
 {
 

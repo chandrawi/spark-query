@@ -4,6 +4,9 @@ namespace SparkLib\SparkQuery\Builder\Component;
 
 use SparkLib\SparkQuery\Structure\Clause;
 
+/**
+ * Builder component for WHERE clause query
+ */
 trait WhereBuilder
 {
 
@@ -13,7 +16,7 @@ trait WhereBuilder
     private $where = [];
 
     /**
-     * Interface Iwhere required method
+     * Get list of where clause
      */
     public function getWhere(): array
     {
@@ -21,7 +24,7 @@ trait WhereBuilder
     }
 
     /**
-     * Interface Iwhere required method
+     * Get last where clause in where list
      */
     public function lastWhere()
     {
@@ -34,7 +37,7 @@ trait WhereBuilder
     }
 
     /**
-     * Interface Iwhere required method
+     * Count list of where clause
      */
     public function countWhere(): int
     {
@@ -42,7 +45,7 @@ trait WhereBuilder
     }
 
     /**
-     * Interface Iwhere required method
+     * Add a where clause to where list
      */
     public function addWhere(Clause $where)
     {

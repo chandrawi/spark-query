@@ -5,6 +5,9 @@ namespace SparkLib\SparkQuery\Structure;
 use SparkLib\SparkQuery\Structure\Column;
 use SparkLib\SparkQuery\Structure\Expression;
 
+/**
+ * Object for storing a clause query structure. Used in WHERE and HAVING query.
+ */
 class Clause
 {
 
@@ -127,13 +130,13 @@ class Clause
         return $this->value;
     }
 
-    /** Get conjunctive type */
+    /** Get clause conjunctive type */
     public function conjunctive(): int
     {
         return $this->conjunctive;
     }
 
-    /** Get nested conjunctive type */
+    /** Get or set nested clause level. Negative for open parenthesis and positive for close parenthesis */
     public function level(int $input = -1): int
     {
         if ($input > -1) {
@@ -162,7 +165,7 @@ class Clause
     }
 
     /**
-     * Get valid operator from input operator
+     * Get a valid operator option from input operator
      */
     private static function getOperator($operator): int
     {
@@ -224,7 +227,7 @@ class Clause
     }
 
     /**
-     * Checking input value
+     * Check and get valid clause comparison value
      */
     private static function getValue($value, int $operator)
     {

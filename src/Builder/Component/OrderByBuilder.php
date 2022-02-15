@@ -4,6 +4,9 @@ namespace SparkLib\SparkQuery\Builder\Component;
 
 use SparkLib\SparkQuery\Structure\Order;
 
+/**
+ * Builder component for ORDER BY query
+ */
 trait OrderByBuilder
 {
 
@@ -13,7 +16,7 @@ trait OrderByBuilder
     private $orderBy = [];
 
     /**
-     * Interface IOrderBy required method
+     * Get query result order list
      */
     public function getOrder(): array
     {
@@ -21,7 +24,7 @@ trait OrderByBuilder
     }
 
     /**
-     * Interface IOrderBy required method
+     * Count query result order list
      */
     public function countOrder(): int
     {
@@ -29,7 +32,7 @@ trait OrderByBuilder
     }
 
     /**
-     * Interface IOrderBy required method
+     * Add a query result order to order list
      */
     public function addOrder(Order $order)
     {

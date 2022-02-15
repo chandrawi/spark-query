@@ -10,6 +10,10 @@ use SparkLib\SparkQuery\Builder\UpdateBuilder;
 use SparkLib\SparkQuery\Builder\DeleteBuilder;
 use SparkLib\SparkQuery\Interfaces\ITranslator;
 
+/**
+ * Translator for generic SQL database.
+ * Should works for most of queries in any SQL RDBMS
+ */
 class GenericTranslator extends BaseTranslator implements ITranslator
 {
 
@@ -27,7 +31,7 @@ class GenericTranslator extends BaseTranslator implements ITranslator
         $this->END_QUERY = ";";
     }
 
-    /** ITranslator required method */
+    /** ITranslator required method. Translate SELECT query from select builder */
     public function translateSelect(QueryObject $query, SelectBuilder $builder)
     {
         $multiTableFlag = boolval($builder->countJoin());
@@ -43,7 +47,7 @@ class GenericTranslator extends BaseTranslator implements ITranslator
         $this->limitOffset($query, $builder->getLimit(), $builder->hasLimit());
     }
 
-    /** ITranslator required method */
+    /** ITranslator required method. Translate INSERT query from insert builder */
     public function translateInsert(QueryObject $query, InsertBuilder $builder)
     {
         $this->firstKeyword($query, $builder->builderType());
@@ -53,7 +57,7 @@ class GenericTranslator extends BaseTranslator implements ITranslator
         $this->limitOffset($query, $builder->getLimit(), $builder->hasLimit());
     }
 
-    /** ITranslator required method */
+    /** ITranslator required method. Translate UPDATE query from update builder */
     public function translateUpdate(QueryObject $query, UpdateBuilder $builder)
     {
         $multiTableFlag = boolval($builder->countJoin());
@@ -66,7 +70,7 @@ class GenericTranslator extends BaseTranslator implements ITranslator
         $this->limitOffset($query, $builder->getLimit(), $builder->hasLimit());
     }
 
-    /** ITranslator required method */
+    /** ITranslator required method. Translate DELETE query from delete builder */
     public function translateDelete(QueryObject $query, DeleteBuilder $builder)
     {
         $this->firstKeyword($query, $builder->builderType());

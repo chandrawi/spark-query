@@ -9,6 +9,9 @@ use SparkLib\SparkQuery\Builder\BaseBuilder;
 use SparkLib\SparkQuery\Builder\DeleteBuilder;
 use SparkLib\SparkQuery\Structure\Table;
 
+/**
+ * DELETE query manipulation class.
+ */
 class Delete extends BaseQuery
 {
 
@@ -30,7 +33,7 @@ class Delete extends BaseQuery
     }
 
     /**
-     * DELETE query
+     * DELETE query table input
      */
     public function delete($table)
     {

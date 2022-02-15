@@ -9,6 +9,10 @@ use SparkLib\SparkQuery\Builder\InsertBuilder;
 use SparkLib\SparkQuery\Builder\UpdateBuilder;
 use SparkLib\SparkQuery\Builder\DeleteBuilder;
 
+/**
+ * Query translator class.
+ * Interfacing query class with translator class and translate query object to query string and parameters.
+ */
 class QueryTranslator
 {
 
@@ -188,7 +192,7 @@ class QueryTranslator
     }
 
     /**
-     * Get params from current query object with input option
+     * Get params from current query object with binding option
      * @param $bindingOption
      * @return array
      */
@@ -201,7 +205,7 @@ class QueryTranslator
     }
 
     /**
-     * Get params from current query object with input option
+     * Get params from input query object with binding option
      * @param $option
      * @return array
      */

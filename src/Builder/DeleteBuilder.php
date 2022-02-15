@@ -8,6 +8,9 @@ use SparkLib\SparkQuery\Builder\Component\LimitBuilder;
 use SparkLib\SparkQuery\Interfaces\IWhere;
 use SparkLib\SparkQuery\Interfaces\ILimit;
 
+/**
+ * Template for building DELETE query
+ */
 class DeleteBuilder extends BaseBuilder implements IWhere, ILimit
 {
 

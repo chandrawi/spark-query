@@ -6,6 +6,11 @@ use SparkLib\SparkQuery\QueryObject;
 use SparkLib\SparkQuery\QueryTranslator;
 use SparkLib\SparkQuery\Builder\SelectBuilder;
 
+/**
+ * Base of query manipulation class.
+ * Must be derived for a query manipulation class.
+ * Contain methods for translating query.
+ */
 class BaseQuery
 {
 
@@ -63,7 +68,7 @@ class BaseQuery
     }
 
     /**
-     * Get query string of current builder object
+     * Get query string of current state builder object
      */
     public function query(int $translator = 0, int $bindingOption = 0)
     {

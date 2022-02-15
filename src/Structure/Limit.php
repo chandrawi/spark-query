@@ -2,6 +2,9 @@
 
 namespace SparkLib\SparkQuery\Structure;
 
+/**
+ * Object for storing limit and offset of query operation. Used in LIMIT and OFFSET query
+ */
 class Limit
 {
 
@@ -27,13 +30,13 @@ class Limit
         $this->offset =  $offset;
     }
 
-    /** Get limit */
+    /** Get limit number */
     public function limit(): int
     {
         return $this->limit;
     }
 
-    /** Get offset */
+    /** Get offset number */
     public function offset(): int
     {
         return $this->offset;
