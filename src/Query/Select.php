@@ -3,6 +3,7 @@
 namespace SparkLib\SparkQuery\Query;
 
 use SparkLib\SparkQuery\Query\BaseQuery;
+use SparkLib\SparkQuery\Query\Component\Clauses;
 use SparkLib\SparkQuery\Query\Component\Where;
 use SparkLib\SparkQuery\Query\Component\GroupBy;
 use SparkLib\SparkQuery\Query\Component\Having;
@@ -24,18 +25,21 @@ class Select extends BaseQuery
     /**
      * Register methods from traits
      */
-    use Where, Having, GroupBy, OrderBy, LimitOffset, JoinTable;
+    use Clauses, Where, Having, GroupBy, OrderBy, LimitOffset, JoinTable;
 
     /**
      * Constructor. Set builder type to select
      */
     public function __construct($translator = 0, $bindingOption = 0, $statement = null)
     {
+        parent::__construct();
         $this->builder = new SelectBuilder();
         $this->builder->builderType(BaseBuilder::SELECT);
         $this->translator = $translator;
         $this->bindingOption = $bindingOption;
         $this->statement = $statement;
+        $this->resetClause();
+        $this->resetJoin();
     }
 
     /**

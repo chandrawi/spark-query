@@ -3,6 +3,7 @@
 namespace SparkLib\SparkQuery\Query;
 
 use SparkLib\SparkQuery\Query\BaseQuery;
+use SparkLib\SparkQuery\Query\Component\Clauses;
 use SparkLib\SparkQuery\Query\Component\Where;
 use SparkLib\SparkQuery\Query\Component\LimitOffset;
 use SparkLib\SparkQuery\Query\Component\JoinTable;
@@ -20,18 +21,21 @@ class Update extends BaseQuery
     /**
      * Register methods from traits
      */
-    use Where, LimitOffset, JoinTable;
+    use Clauses, Where, LimitOffset, JoinTable;
 
     /**
      * Constructor. Set builder type to update
      */
     public function __construct($translator = 0, $bindingOption = 0, $statement = null)
     {
+        parent::__construct();
         $this->builder = new UpdateBuilder();
         $this->builder->builderType(BaseBuilder::UPDATE);
         $this->translator = $translator;
         $this->bindingOption = $bindingOption;
         $this->statement = $statement;
+        $this->resetClause();
+        $this->resetJoin();
     }
 
     /**

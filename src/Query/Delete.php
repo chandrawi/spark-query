@@ -3,6 +3,7 @@
 namespace SparkLib\SparkQuery\Query;
 
 use SparkLib\SparkQuery\Query\BaseQuery;
+use SparkLib\SparkQuery\Query\Component\Clauses;
 use SparkLib\SparkQuery\Query\Component\Where;
 use SparkLib\SparkQuery\Query\Component\LimitOffset;
 use SparkLib\SparkQuery\Builder\BaseBuilder;
@@ -18,18 +19,20 @@ class Delete extends BaseQuery
     /**
      * Register methods from traits
      */
-    use Where, LimitOffset;
+    use Clauses, Where, LimitOffset;
 
     /**
      * Constructor. Set builder type to delete
      */
     public function __construct($translator = 0, $bindingOption = 0, $statement = null)
     {
+        parent::__construct();
         $this->builder = new DeleteBuilder();
         $this->builder->builderType(BaseBuilder::DELETE);
         $this->translator = $translator;
         $this->bindingOption = $bindingOption;
         $this->statement = $statement;
+        $this->resetClause();
     }
 
     /**

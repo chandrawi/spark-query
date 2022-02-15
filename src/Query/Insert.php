@@ -25,6 +25,7 @@ class Insert extends BaseQuery
      */
     public function __construct($translator = 0, $bindingOption = 0, $statement = null)
     {
+        parent::__construct();
         $this->builder = new InsertBuilder();
         $this->builder->builderType(BaseBuilder::INSERT);
         $this->translator = $translator;

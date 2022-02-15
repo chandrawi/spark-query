@@ -14,6 +14,16 @@ trait Clauses
 {
 
     /**
+     * Reset Clause object static properties
+     */
+    public function resetClause()
+    {
+        Clause::$clauseType = Clause::NONE;
+        Clause::$nestedConjunctive = Clause::CONJUNCTIVE_NONE;
+        Clause::$nestedLevel = 0;
+    }
+
+    /**
      * Add Clause object to where or having property of builder object
      */
     private function clauses($column, int $operator, $values, int $conjunctive)

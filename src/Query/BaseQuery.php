@@ -39,6 +39,21 @@ class BaseQuery
      */
     protected $statement;
 
+    /** Tranlate query flag */
+    protected $queryFlag;
+
+    /** Tranlate params flag */
+    protected $paramFlag;
+
+    /**
+     * Constructor. Reset properties
+     */
+    public function __construct()
+    {
+        $this->queryFlag = false;
+        $this->paramFlag = false;
+    }
+
     /**
      * Return current state of query object
      */
@@ -58,13 +73,11 @@ class BaseQuery
     /**
      * Translate builder object to query object
      */
-    private function translate(int $translator)
+    private function translate(int $translator = 0)
     {
-        if (!($this->query instanceof QueryObject)) {
-            $translator != 0 ?: $translator = $this->translator;
-            $this->query = new QueryObject;
-            QueryTranslator::translateBuilder($this->query, $this->builder, $translator);
-        }
+        $translator != 0 ?: $translator = $this->translator;
+        $this->query = new QueryObject;
+        QueryTranslator::translateBuilder($this->query, $this->builder, $translator);
     }
 
     /**
@@ -72,7 +85,10 @@ class BaseQuery
      */
     public function query(int $translator = 0, int $bindingOption = 0)
     {
-        $this->translate($translator);
+        if ($this->queryFlag == $this->paramFlag) {
+            $this->translate($translator);
+        }
+        $this->queryFlag = !$this->queryFlag;
         $bindingOption != 0 ?: $bindingOption = $this->bindingOption;
         return QueryTranslator::getQuery($this->query, $bindingOption);
     }
@@ -82,7 +98,10 @@ class BaseQuery
      */
     public function params(int $translator = 0, int $bindingOption = 0)
     {
-        $this->translate($translator);
+        if ($this->queryFlag == $this->paramFlag) {
+            $this->translate($translator);
+        }
+        $this->paramFlag = !$this->paramFlag;
         $bindingOption != 0 ?: $bindingOption = $this->bindingOption;
         return QueryTranslator::getParams($this->query, $bindingOption);
     }

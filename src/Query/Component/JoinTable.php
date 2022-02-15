@@ -13,6 +13,14 @@ trait JoinTable
 {
 
     /**
+     * Reset Join object static properties
+     */
+    public function resetJoin()
+    {
+        Join::$table = '';
+    }
+
+    /**
      * Add Join object to join property of Builder object
      */
     private function setJoinTable($joinTable, int $joinType)
