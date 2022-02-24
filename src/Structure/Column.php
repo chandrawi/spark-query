@@ -83,6 +83,22 @@ class Column
     }
 
     /**
+     * Create multiple Column objects
+     */
+    public static function createMulti($columns)
+    {
+        $columnObjects = [];
+        if (is_string($columns)) {
+            $columnObjects[] = self::create($columns);
+        } elseif (is_array($columns)) {
+            foreach ($columns as $col) {
+                $columnObjects[] = self::create($col);
+            }
+        }
+        return $columnObjects;
+    }
+
+    /**
      * Parsing string input column to table, column name, and aggregate function
      */
     private static function parseString(string $column): array

@@ -83,6 +83,20 @@ class Value
     }
 
     /**
+     * Create multiple Value objects
+     */
+    public static function createMulti($inputValues)
+    {
+        $valuesObjects = [];
+        if (is_array($inputValues)) {
+            foreach ($inputValues as $val) {
+                $valuesObjects[] = self::create($val);
+            }
+        }
+        return $valuesObjects;
+    }
+
+    /**
      * Parsing column and value pair from input array
      */
     private static function parsePair(array $pairs): array

@@ -16,14 +16,7 @@ trait GroupBy
      */
     public function groupBy($columns)
     {
-        $columnObjects = [];
-        if (is_array($columns) && count($columns) > 1) {
-            foreach ($columns as $column) {
-                $columnObjects[] = Column::create($column);
-            }
-        } else {
-            $columnObjects[] = Column::create($columns);
-        }
+        $columnObjects = Column::createMulti($columns);
         foreach ($columnObjects as $column) {
             if ($this->builder instanceof IGroupBy) {
                 $this->builder->addGroup($column);

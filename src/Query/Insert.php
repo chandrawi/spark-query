@@ -73,8 +73,8 @@ class Insert extends BaseQuery
      */
     public function multiValues(array $multiValues)
     {
-        foreach ($multiValues as $values) {
-            $valueObject = Value::create($values);
+        $valueObjects = Value::createMulti($multiValues);
+        foreach ($valueObjects as $valueObject) {
             $this->builder->addValue($valueObject);
         }
         return $this;

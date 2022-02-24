@@ -82,8 +82,8 @@ class Select extends BaseQuery
      */
     public function columns(array $columns)
     {
-        foreach ($columns as $alias => $column) {
-            $columnObject = Column::create([$alias => $column]);
+        $columnObjects = Column::createMulti($columns);
+        foreach ($columnObjects as $columnObject) {
             $this->builder->addColumn($columnObject);
         }
         return $this;

@@ -53,7 +53,11 @@ class Order
      */
     public static function create($column, $orderType): Order
     {
-        $columnObject = Column::create($column);
+        if ($column instanceof Column) {
+            $columnObject = $column;
+        } else {
+            $columnObject = Column::create($column);
+        }
         $validType = self::getType($orderType);
         return new Order($columnObject, $validType);
     }

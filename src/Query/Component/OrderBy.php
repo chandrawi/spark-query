@@ -2,6 +2,7 @@
 
 namespace SparkLib\SparkQuery\Query\Component;
 
+use SparkLib\SparkQuery\Structure\Column;
 use SparkLib\SparkQuery\Structure\Order;
 use SparkLib\SparkQuery\Interfaces\IOrderBy;
 
@@ -16,17 +17,11 @@ trait OrderBy
      */
     public function orderBy($columns, $orderType)
     {
-        $orderObjects = [];
-        if (is_array($columns) && count($columns) > 1) {
-            foreach ($columns as $column) {
-                $orderObjects[] = Order::create($column, $orderType);
-            }
-        } else {
-            $orderObjects[] = Order::create($columns, $orderType);
-        }
-        foreach ($orderObjects as $order) {
+        $columnObjects = Column::createMulti($columns);
+        foreach ($columnObjects as $columnObject) {
+            $orderObject = Order::create($columnObject, $orderType);
             if ($this->builder instanceof IOrderBy) {
-                $this->builder->addOrder($order);
+                $this->builder->addOrder($orderObject);
             } else {
                 throw new \Exception('Builder object does not support ORDER BY query');
             }

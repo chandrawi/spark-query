@@ -150,7 +150,7 @@ class Clause
      */
     public static function create(int $clauseType, $column, $operator, $value, int $conjunctive): Clause
     {
-        if ($column instanceof Expression) {
+        if ($column instanceof Expression or $column instanceof Column) {
             $columnObject = $column;
         } else {
             $columnObject = Column::create($column);
