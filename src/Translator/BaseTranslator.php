@@ -347,7 +347,7 @@ class BaseTranslator
             $query->add(' USING '. $this->OPEN_BRACKET);
             foreach ($usingColumns as $column) {
                 $this->column($query, $column, false);
-                if (--$count > 1) $query->add($this->COMMA);
+                if (--$count > 0) $query->add($this->COMMA);
             }
             $query->add($this->CLOSE_BRACKET);
         } else {
@@ -543,7 +543,7 @@ class BaseTranslator
         $count = count($values);
         foreach ($values as $value) {
             $query->add($value, true);
-            (--$count < 1) ?: $query->add($this->COMMA);
+            if (--$count > 0) $query->add($this->COMMA);
         }
         $query->add($this->CLOSE_BRACKET);
     }
@@ -557,7 +557,7 @@ class BaseTranslator
             $query->add(' GROUP BY ');
             foreach ($groups as $group) {
                 $this->column($query, $group, $multiTableFlag);
-                if (--$count > 1) $query->add($this->COMMA);
+                if (--$count > 0) $query->add($this->COMMA);
             }
         }
     }
@@ -580,7 +580,7 @@ class BaseTranslator
                     case Order::ORDER_DESC:
                         $query->add(' DESC');
                 }
-                (--$count < 1) ?: $query->add($this->COMMA);
+                if (--$count > 0) $query->add($this->COMMA);
             }
         }
     }

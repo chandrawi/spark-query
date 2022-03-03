@@ -91,8 +91,8 @@ class Column
         if (is_string($columns)) {
             $columnObjects[] = self::create($columns);
         } elseif (is_array($columns)) {
-            foreach ($columns as $col) {
-                $columnObjects[] = self::create($col);
+            foreach ($columns as $key => $col) {
+                $columnObjects[] = is_int($key) ? self::create($col) : self::create([$key => $col]);
             }
         }
         return $columnObjects;
